@@ -165,8 +165,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # Extract and clean the tables from verification logs
-          grep -A 20 "Test Results" /tmp/verify_baseline.log | sed 's/\x1b\[[0-9;]*m//g' > /tmp/baseline_table.txt || echo "Could not extract baseline verification" > /tmp/baseline_table.txt
-          grep -A 20 "Test Results" /tmp/verify_reset.log | sed 's/\x1b\[[0-9;]*m//g' > /tmp/reset_table.txt || echo "Could not extract reset verification" > /tmp/reset_table.txt
+          # Remove ANSI codes and timestamps
+          grep -A 20 "Test Results" /tmp/verify_baseline.log | sed 's/\x1b\[[0-9;]*m//g' | sed 's/^[0-9:]\{8\}  //g' > /tmp/baseline_table.txt || echo "Could not extract baseline verification" > /tmp/baseline_table.txt
+          grep -A 20 "Test Results" /tmp/verify_reset.log | sed 's/\x1b\[[0-9;]*m//g' | sed 's/^[0-9:]\{8\}  //g' > /tmp/reset_table.txt || echo "Could not extract reset verification" > /tmp/reset_table.txt
 
           # Create PR comment
           cat > /tmp/pr_comment.md << 'EOF'
