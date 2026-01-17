@@ -62,6 +62,6 @@
   {{ demo_source_ops._log("") }}
   {{ demo_source_ops._log("✓ Baseline load complete!") }}
 
-  {# Show final status - uncomment after demo_status is merged #}
-  {# {{ demo_source_ops.demo_status() }} #}
+  {# Show final status #}
+  {{ demo_source_ops.demo_status() }}
 {% endmacro %}
