@@ -46,6 +46,18 @@
       {{ return(demo_source_ops._get_duckdb_utilities_truncate_shop()) }}
     {% elif path == 'utilities/truncate_crm' %}
       {{ return(demo_source_ops._get_duckdb_utilities_truncate_crm()) }}
+    {% elif path == 'deltas/day_01_shop' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_shop()) }}
+    {% elif path == 'deltas/day_01_crm' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_crm()) }}
+    {% elif path == 'deltas/day_02_shop' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop()) }}
+    {% elif path == 'deltas/day_02_crm' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_crm()) }}
+    {% elif path == 'deltas/day_03_shop' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_shop()) }}
+    {% elif path == 'deltas/day_03_crm' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_crm()) }}
     {% else %}
       {{ exceptions.raise_compiler_error("Unknown DuckDB SQL path: " ~ path) }}
     {% endif %}
