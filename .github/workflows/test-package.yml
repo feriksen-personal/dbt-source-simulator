@@ -117,7 +117,7 @@ jobs:
       - name: Verify baseline data
         run: |
           echo "=== Verifying baseline data ==="
-          dbt run-operation demo_verify_baseline --profile demo_source
+          dbt run-operation demo_verify_baseline --profile demo_source 2>&1 | tee /tmp/verify_baseline.log
 
       - name: Test demo_status
         run: |
@@ -149,9 +149,43 @@ jobs:
       - name: Verify reset restored baseline
         run: |
           echo "=== Verifying reset restored baseline ==="
-          dbt run-operation demo_verify_baseline --profile demo_source
+          dbt run-operation demo_verify_baseline --profile demo_source 2>&1 | tee /tmp/verify_reset.log
 
       - name: Final status check
         run: |
           echo "=== Final status check ==="
           dbt run-operation demo_status --profile demo_source
+
+      - name: Post test results to PR
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Extract the table from verification logs
+          BASELINE_TABLE=$(grep -A 20 "Test Results" /tmp/verify_baseline.log | sed 's/\x1b\[[0-9;]*m//g' || echo "Could not extract baseline verification")
+          RESET_TABLE=$(grep -A 20 "Test Results" /tmp/verify_reset.log | sed 's/\x1b\[[0-9;]*m//g' || echo "Could not extract reset verification")
+
+          # Create PR comment
+          cat > /tmp/pr_comment.md << 'EOF'
+          ## 🧪 DuckDB Test Results
+
+          ### ✓ Baseline Load Verification
+          ```
+          $BASELINE_TABLE
+          ```
+
+          ### ✓ Reset Verification
+          ```
+          $RESET_TABLE
+          ```
+
+          ---
+          *Automated test results from CI workflow*
+          EOF
+
+          # Substitute variables
+          sed -i "s|\$BASELINE_TABLE|$BASELINE_TABLE|g" /tmp/pr_comment.md
+          sed -i "s|\$RESET_TABLE|$RESET_TABLE|g" /tmp/pr_comment.md
+
+          # Post comment to PR
+          gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment.md
