@@ -58,18 +58,51 @@
       {{ return(demo_source_ops._get_duckdb_utilities_truncate_shop()) }}
     {% elif path == 'utilities/truncate_crm' %}
       {{ return(demo_source_ops._get_duckdb_utilities_truncate_crm()) }}
-    {% elif path == 'deltas/day_01_shop' %}
-      {{ return(demo_source_ops._get_duckdb_deltas_day_01_shop()) }}
-    {% elif path == 'deltas/day_01_crm' %}
-      {{ return(demo_source_ops._get_duckdb_deltas_day_01_crm()) }}
-    {% elif path == 'deltas/day_02_shop' %}
-      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop()) }}
-    {% elif path == 'deltas/day_02_crm' %}
-      {{ return(demo_source_ops._get_duckdb_deltas_day_02_crm()) }}
-    {% elif path == 'deltas/day_03_shop' %}
-      {{ return(demo_source_ops._get_duckdb_deltas_day_03_shop()) }}
-    {% elif path == 'deltas/day_03_crm' %}
-      {{ return(demo_source_ops._get_duckdb_deltas_day_03_crm()) }}
+    {# Delta table-specific routes #}
+    {% elif path == 'deltas/day_01_crm_email_activity' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_crm_email_activity()) }}
+    {% elif path == 'deltas/day_01_crm_web_sessions' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_crm_web_sessions()) }}
+    {% elif path == 'deltas/day_01_shop_customers' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_shop_customers()) }}
+    {% elif path == 'deltas/day_01_shop_order_items' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_shop_order_items()) }}
+    {% elif path == 'deltas/day_01_shop_orders' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_shop_orders()) }}
+    {% elif path == 'deltas/day_01_shop_orders_updates' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_shop_orders_updates()) }}
+    {% elif path == 'deltas/day_01_shop_payments' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_01_shop_payments()) }}
+    {% elif path == 'deltas/day_02_crm_email_activity' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_crm_email_activity()) }}
+    {% elif path == 'deltas/day_02_crm_web_sessions' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_crm_web_sessions()) }}
+    {% elif path == 'deltas/day_02_shop_customers' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop_customers()) }}
+    {% elif path == 'deltas/day_02_shop_order_items' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop_order_items()) }}
+    {% elif path == 'deltas/day_02_shop_orders' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop_orders()) }}
+    {% elif path == 'deltas/day_02_shop_orders_updates' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop_orders_updates()) }}
+    {% elif path == 'deltas/day_02_shop_payments' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop_payments()) }}
+    {% elif path == 'deltas/day_02_shop_products_updates' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_02_shop_products_updates()) }}
+    {% elif path == 'deltas/day_03_crm_email_activity' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_crm_email_activity()) }}
+    {% elif path == 'deltas/day_03_crm_web_sessions' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_crm_web_sessions()) }}
+    {% elif path == 'deltas/day_03_shop_customers' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_shop_customers()) }}
+    {% elif path == 'deltas/day_03_shop_order_items' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_shop_order_items()) }}
+    {% elif path == 'deltas/day_03_shop_orders' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_shop_orders()) }}
+    {% elif path == 'deltas/day_03_shop_orders_updates' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_shop_orders_updates()) }}
+    {% elif path == 'deltas/day_03_shop_payments' %}
+      {{ return(demo_source_ops._get_duckdb_deltas_day_03_shop_payments()) }}
     {% else %}
       {{ exceptions.raise_compiler_error("Unknown DuckDB SQL path: " ~ path) }}
     {% endif %}

@@ -48,17 +48,53 @@
   {{ demo_source_ops._log("") }}
   {{ demo_source_ops._log("Applying Day " ~ day_str ~ " delta changes...") }}
 
-  {# Apply shop delta #}
+  {# Apply shop delta - table by table in FK order #}
   {{ demo_source_ops._log("→ Applying jaffle_shop delta...") }}
-  {% set shop_delta_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_shop') %}
-  {% do run_query(shop_delta_sql) %}
-  {{ demo_source_ops._log("  ✓ Applied jaffle_shop delta") }}
 
-  {# Apply CRM delta #}
+  {# Customers first (no dependencies) #}
+  {% set customers_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_shop_customers') %}
+  {% do run_query(customers_sql) %}
+  {{ demo_source_ops._log("  ✓ Applied customers changes") }}
+
+  {# Products updates (if exists for this day) #}
+  {% if day == 2 %}
+    {% set products_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_shop_products_updates') %}
+    {% do run_query(products_sql) %}
+    {{ demo_source_ops._log("  ✓ Applied products updates") }}
+  {% endif %}
+
+  {# Orders (depends on customers) #}
+  {% set orders_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_shop_orders') %}
+  {% do run_query(orders_sql) %}
+  {{ demo_source_ops._log("  ✓ Applied orders changes") }}
+
+  {# Order items (depends on orders and products) #}
+  {% set order_items_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_shop_order_items') %}
+  {% do run_query(order_items_sql) %}
+  {{ demo_source_ops._log("  ✓ Applied order_items changes") }}
+
+  {# Payments (depends on orders) #}
+  {% set payments_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_shop_payments') %}
+  {% do run_query(payments_sql) %}
+  {{ demo_source_ops._log("  ✓ Applied payments changes") }}
+
+  {# Orders updates (status changes after payment) #}
+  {% set orders_updates_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_shop_orders_updates') %}
+  {% do run_query(orders_updates_sql) %}
+  {{ demo_source_ops._log("  ✓ Applied orders status updates") }}
+
+  {# Apply CRM delta - table by table #}
   {{ demo_source_ops._log("→ Applying jaffle_crm delta...") }}
-  {% set crm_delta_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_crm') %}
-  {% do run_query(crm_delta_sql) %}
-  {{ demo_source_ops._log("  ✓ Applied jaffle_crm delta") }}
+
+  {# Email activity #}
+  {% set email_activity_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_crm_email_activity') %}
+  {% do run_query(email_activity_sql) %}
+  {{ demo_source_ops._log("  ✓ Applied email_activity changes") }}
+
+  {# Web sessions #}
+  {% set web_sessions_sql = demo_source_ops._get_sql('deltas/day_' ~ day_str ~ '_crm_web_sessions') %}
+  {% do run_query(web_sessions_sql) %}
+  {{ demo_source_ops._log("  ✓ Applied web_sessions changes") }}
 
   {{ demo_source_ops._log("") }}
 
