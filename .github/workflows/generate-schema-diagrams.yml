@@ -31,9 +31,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install DBML CLI
-        run: npm install -g @dbml/cli
-
       - name: Create output directories
         run: |
           mkdir -p docs/generated
@@ -46,10 +43,10 @@ jobs:
 
       - name: Generate ERD images from DBML
         run: |
-          # Generate SVG diagrams using dbml-renderer
+          # Generate SVG diagrams using @softwaretechnik/dbml-renderer
           # DBML files are temporary - not committed to main repo
-          dbml2svg docs/generated/jaffle-shop.dbml -o wiki/images/jaffle-shop-erd.svg
-          dbml2svg docs/generated/jaffle-crm.dbml -o wiki/images/jaffle-crm-erd.svg
+          npx --yes @softwaretechnik/dbml-renderer -i docs/generated/jaffle-shop.dbml -o wiki/images/jaffle-shop-erd.svg
+          npx --yes @softwaretechnik/dbml-renderer -i docs/generated/jaffle-crm.dbml -o wiki/images/jaffle-crm-erd.svg
 
       - name: Clone wiki repository
         run: |
