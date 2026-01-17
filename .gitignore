@@ -212,3 +212,8 @@ logs/
 
 # Claude AI assistant files (local only)
 .claude/
+
+# ERD generation artifacts (images and DBML stored in wiki, not main repo)
+docs/generated/*.dbml
+wiki/images/*.svg
+wiki/images/*.png
