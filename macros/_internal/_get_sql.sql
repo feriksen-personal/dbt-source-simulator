@@ -32,20 +32,25 @@
 #}
 
 {% macro _get_sql(path) %}
-  {# Detect adapter type and select appropriate directory #}
-  {% set adapter_dir = 'duckdb' if target.type == 'duckdb' else 'azure' %}
-  {% set full_path = 'data/' ~ adapter_dir ~ '/' ~ path ~ '.sql' %}
-
-  {# Load SQL file contents #}
-  {% set sql = load_file_contents(full_path) %}
-
-  {# Raise error if file not found #}
-  {% if sql is none %}
-    {{ exceptions.raise_compiler_error(
-      "SQL file not found: " ~ full_path ~
-      " (adapter: " ~ target.type ~ ")"
-    ) }}
+  {# Route to adapter-specific SQL macros #}
+  {% if target.type == 'duckdb' %}
+    {% if path == 'baseline/shop_schema' %}
+      {{ return(demo_source_ops._get_duckdb_baseline_shop_schema()) }}
+    {% elif path == 'baseline/shop_seed' %}
+      {{ return(demo_source_ops._get_duckdb_baseline_shop_seed()) }}
+    {% elif path == 'baseline/crm_schema' %}
+      {{ return(demo_source_ops._get_duckdb_baseline_crm_schema()) }}
+    {% elif path == 'baseline/crm_seed' %}
+      {{ return(demo_source_ops._get_duckdb_baseline_crm_seed()) }}
+    {% elif path == 'utilities/truncate_shop' %}
+      {{ return(demo_source_ops._get_duckdb_utilities_truncate_shop()) }}
+    {% elif path == 'utilities/truncate_crm' %}
+      {{ return(demo_source_ops._get_duckdb_utilities_truncate_crm()) }}
+    {% else %}
+      {{ exceptions.raise_compiler_error("Unknown DuckDB SQL path: " ~ path) }}
+    {% endif %}
+  {% else %}
+    {# Azure SQL - to be implemented later #}
+    {{ exceptions.raise_compiler_error("Azure SQL adapter not yet implemented") }}
   {% endif %}
-
-  {{ return(sql) }}
 {% endmacro %}
