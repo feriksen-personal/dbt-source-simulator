@@ -161,9 +161,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Extract the table from verification logs
-          BASELINE_TABLE=$(grep -A 20 "Test Results" /tmp/verify_baseline.log | sed 's/\x1b\[[0-9;]*m//g' || echo "Could not extract baseline verification")
-          RESET_TABLE=$(grep -A 20 "Test Results" /tmp/verify_reset.log | sed 's/\x1b\[[0-9;]*m//g' || echo "Could not extract reset verification")
+          # Extract and clean the tables from verification logs
+          grep -A 20 "Test Results" /tmp/verify_baseline.log | sed 's/\x1b\[[0-9;]*m//g' > /tmp/baseline_table.txt || echo "Could not extract baseline verification" > /tmp/baseline_table.txt
+          grep -A 20 "Test Results" /tmp/verify_reset.log | sed 's/\x1b\[[0-9;]*m//g' > /tmp/reset_table.txt || echo "Could not extract reset verification" > /tmp/reset_table.txt
 
           # Create PR comment
           cat > /tmp/pr_comment.md << 'EOF'
@@ -171,21 +171,21 @@ jobs:
 
           ### ✓ Baseline Load Verification
           ```
-          $BASELINE_TABLE
+          EOF
+          cat /tmp/baseline_table.txt >> /tmp/pr_comment.md
+          cat >> /tmp/pr_comment.md << 'EOF'
           ```
 
           ### ✓ Reset Verification
           ```
-          $RESET_TABLE
+          EOF
+          cat /tmp/reset_table.txt >> /tmp/pr_comment.md
+          cat >> /tmp/pr_comment.md << 'EOF'
           ```
 
           ---
           *Automated test results from CI workflow*
           EOF
-
-          # Substitute variables
-          sed -i "s|\$BASELINE_TABLE|$BASELINE_TABLE|g" /tmp/pr_comment.md
-          sed -i "s|\$RESET_TABLE|$RESET_TABLE|g" /tmp/pr_comment.md
 
           # Post comment to PR
           gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment.md
