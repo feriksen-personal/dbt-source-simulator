@@ -23,7 +23,7 @@ E-commerce and order management system with transactional data.
 
 ### jaffle_shop Entity-Relationship Diagram
 
-![jaffle_shop ERD](images/jaffle-shop-erd.svg)
+![jaffle_shop ERD](images/jaffle-shop-erd.png)
 
 ### Tables Overview
 
@@ -369,7 +369,7 @@ Marketing and customer relationship management system.
 
 ### jaffle_crm Entity-Relationship Diagram
 
-![jaffle_crm ERD](images/jaffle-crm-erd.svg)
+![jaffle_crm ERD](images/jaffle-crm-erd.png)
 
 ### Tables Overview
 
