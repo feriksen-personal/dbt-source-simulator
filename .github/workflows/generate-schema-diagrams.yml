@@ -26,9 +26,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Python dependencies
-        run: |
-          pip install requests
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Create output directories
         run: |
@@ -42,10 +43,10 @@ jobs:
 
       - name: Generate ERD images from DBML
         run: |
-          # Generate PNG diagrams using dbdiagram.io API
+          # Generate SVG diagrams using @softwaretechnik/dbml-renderer
           # DBML files are temporary - not committed to main repo
-          python3 scripts/dbml_to_png.py docs/generated/jaffle-shop.dbml wiki/images/jaffle-shop-erd.png
-          python3 scripts/dbml_to_png.py docs/generated/jaffle-crm.dbml wiki/images/jaffle-crm-erd.png
+          npx --yes @softwaretechnik/dbml-renderer -i docs/generated/jaffle-shop.dbml -o wiki/images/jaffle-shop-erd.svg
+          npx --yes @softwaretechnik/dbml-renderer -i docs/generated/jaffle-crm.dbml -o wiki/images/jaffle-crm-erd.svg
 
       - name: Clone wiki repository
         run: |
@@ -54,8 +55,8 @@ jobs:
       - name: Copy ERD images to wiki
         run: |
           mkdir -p wiki-repo/images
-          cp wiki/images/jaffle-shop-erd.png wiki-repo/images/
-          cp wiki/images/jaffle-crm-erd.png wiki-repo/images/
+          cp wiki/images/jaffle-shop-erd.svg wiki-repo/images/
+          cp wiki/images/jaffle-crm-erd.svg wiki-repo/images/
 
       - name: Commit and push to wiki
         run: |
@@ -64,7 +65,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add images/*.png
+          git add images/*.svg
 
           if git diff --cached --quiet; then
             echo "No wiki changes to commit"
