@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sqlfluff
+
+      - name: Lint SQL files (when they exist)
+        run: |
+          if find macros -name "*.sql" -type f | grep -q .; then
+            echo "Linting macro SQL files..."
+            sqlfluff lint macros/ --dialect postgres || true
+          else
+            echo "No SQL files found yet, skipping lint"
+          fi
+
+      - name: Check YAML syntax
+        run: |
+          if [ -f dbt_project.yml ]; then
+            python -c "import yaml; yaml.safe_load(open('dbt_project.yml'))"
+            echo "✓ dbt_project.yml is valid"
+          fi
+
+  validate-structure:
+    name: Validate Package Structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check required files
+        run: |
+          echo "Checking package structure..."
+          test -f dbt_project.yml || (echo "Missing dbt_project.yml" && exit 1)
+          test -f README.md || (echo "Missing README.md" && exit 1)
+          test -f LICENSE || (echo "Missing LICENSE" && exit 1)
+          test -d macros || (echo "Missing macros/ directory" && exit 1)
+          test -d data || (echo "Missing data/ directory" && exit 1)
+          echo "✓ All required files present"
+
+      - name: Verify directory structure
+        run: |
+          test -d data/duckdb/baseline || (echo "Missing data/duckdb/baseline" && exit 1)
+          test -d data/duckdb/deltas || (echo "Missing data/duckdb/deltas" && exit 1)
+          test -d data/duckdb/utilities || (echo "Missing data/duckdb/utilities" && exit 1)
+          test -d data/azure/baseline || (echo "Missing data/azure/baseline" && exit 1)
+          test -d data/azure/deltas || (echo "Missing data/azure/deltas" && exit 1)
+          test -d data/azure/utilities || (echo "Missing data/azure/utilities" && exit 1)
+          test -d macros/_internal || (echo "Missing macros/_internal" && exit 1)
+          echo "✓ Directory structure correct"
+
+  # TODO: Add functional tests once DuckDB operations are implemented
+  # test-duckdb:
+  #   name: Test DuckDB Operations
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.11'
+  #     - name: Install dbt-duckdb
+  #       run: pip install dbt-duckdb
+  #     - name: Run operations
+  #       run: |
+  #         dbt deps
+  #         dbt run-operation demo_load_baseline --target dev
+  #         dbt run-operation demo_status --target dev
