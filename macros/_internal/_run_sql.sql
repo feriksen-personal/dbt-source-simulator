@@ -13,6 +13,9 @@
 
 {% macro _run_sql(sql) %}
   {% if target.type == 'databricks' %}
+    {# Replace hardcoded catalog name with actual target catalog #}
+    {% set sql = sql.replace('origin_simulator_jaffle_corp', target.catalog) %}
+
     {# Split on semicolon and execute each statement separately #}
     {% set statements = sql.split(';') %}
     {% for stmt in statements %}
