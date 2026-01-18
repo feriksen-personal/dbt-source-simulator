@@ -1,0 +1,259 @@
+# justfile for dbt-demo-source-ops
+#
+# This is a TEMPLATE for YOUR dbt project.
+# Copy this file to your project root and customize as needed.
+#
+# just is a modern alternative to make with better syntax and features.
+# Install: https://github.com/casey/just#installation
+#
+# Usage:
+#   just --list         # Show all available commands (default)
+#   just baseline       # Load baseline data
+#   just delta 1        # Apply Day 1 changes
+#   just full-demo      # Run through all 3 days
+#
+# Override variables:
+#   just profile=my_project baseline
+#   just target=motherduck baseline
+#   just profile=my_project target=motherduck baseline
+#
+# Documentation: https://github.com/feriksen-personal/dbt-azure-demo-source-ops/wiki
+
+# ==========================================================================
+# Configuration Variables
+# ==========================================================================
+
+# dbt profile name (default: demo_source)
+profile := "demo_source"
+
+# dbt target name (default: dev for DuckDB local)
+# Options: dev (DuckDB), motherduck (MotherDuck cloud), azure (Azure SQL)
+target := "dev"
+
+# Soda Core configuration path
+soda_config := "extras/soda/configuration.yml"
+
+# ==========================================================================
+# Default Recipe: Show Available Commands
+# ==========================================================================
+
+# Show all available commands
+default:
+    @just --list
+
+# ==========================================================================
+# Setup and Dependencies
+# ==========================================================================
+
+# Install dbt package dependencies
+setup:
+    @echo "Installing dbt package dependencies..."
+    dbt deps --profile {{profile}}
+    @echo "✓ Dependencies installed"
+
+# ==========================================================================
+# Core Operations
+# ==========================================================================
+
+# Load baseline data (Day 0: 100 customers, 500 orders)
+baseline:
+    @echo "Loading baseline data..."
+    dbt run-operation demo_load_baseline --profile {{profile}} --target {{target}}
+    @echo "✓ Baseline loaded"
+
+# Verify baseline data was loaded correctly
+verify:
+    @echo "Verifying baseline data..."
+    dbt run-operation demo_verify_baseline --profile {{profile}} --target {{target}}
+    @echo "✓ Baseline verified"
+
+# Show current row counts for all tables
+status:
+    @echo "Checking demo source status..."
+    dbt run-operation demo_status --profile {{profile}} --target {{target}}
+
+# Apply delta changes for a specific day (1, 2, or 3)
+delta day:
+    @echo "Applying Day {{day}} changes..."
+    dbt run-operation demo_apply_delta --args '{day: {{day}}}' --profile {{profile}} --target {{target}}
+    @echo "✓ Day {{day}} applied"
+
+# Truncate all tables and reload baseline
+reset:
+    @echo "Resetting to baseline..."
+    dbt run-operation demo_reset --profile {{profile}} --target {{target}}
+    @echo "✓ Reset complete"
+
+# ==========================================================================
+# Cleanup
+# ==========================================================================
+
+# Remove DuckDB database files (local development only)
+clean:
+    @echo "Removing DuckDB database files..."
+    @if [ -f "data/demo_source.duckdb" ]; then \
+        rm -f data/demo_source.duckdb data/demo_source.duckdb.wal; \
+        echo "✓ Removed data/demo_source.duckdb"; \
+    else \
+        echo "ℹ No database file found at data/demo_source.duckdb"; \
+    fi
+
+# ==========================================================================
+# Data Quality (Soda Core)
+# ==========================================================================
+
+# Run Soda Core quality checks on jaffle_shop database
+soda-shop:
+    @echo "Running Soda quality checks on jaffle_shop..."
+    soda scan -d demo_source \
+        -c {{soda_config}} \
+        extras/soda/contracts/jaffle_shop.yml
+    @echo "✓ jaffle_shop checks complete"
+
+# Run Soda Core quality checks on jaffle_crm database
+soda-crm:
+    @echo "Running Soda quality checks on jaffle_crm..."
+    soda scan -d demo_source \
+        -c {{soda_config}} \
+        extras/soda/contracts/jaffle_crm.yml
+    @echo "✓ jaffle_crm checks complete"
+
+# Run quality checks on both databases
+soda-scan: soda-shop soda-crm
+    @echo "✓ All Soda checks complete"
+
+# ==========================================================================
+# Workflows (Combine Multiple Operations)
+# ==========================================================================
+
+# Initialize: setup + baseline + verify + status
+init: setup baseline verify status
+    @echo ""
+    @echo "✓ Initialization complete!"
+    @echo "  Next steps:"
+    @echo "    - Run 'just delta 1' to apply Day 1 changes"
+    @echo "    - Run 'just full-demo' to simulate all 3 days"
+    @echo "    - Run 'just soda-scan' to check data quality"
+
+# Full demo workflow: baseline + all 3 days + status
+full-demo: baseline (delta "1") (delta "2") (delta "3") status
+    @echo ""
+    @echo "✓ Full demo complete!"
+    @echo "  All 3 days of changes have been applied."
+    @echo "  Run 'just reset' to return to baseline."
+
+# Test workflow: full demo + data quality checks
+test-workflow: full-demo soda-scan
+    @echo ""
+    @echo "✓ Test workflow complete!"
+    @echo "  Data has been loaded and validated."
+
+# ==========================================================================
+# Examples and Convenience Recipes
+# ==========================================================================
+
+# Quick example: Initialize with MotherDuck
+motherduck-init: (setup) (baseline) (verify) (status)
+    #!/usr/bin/env bash
+    if [ -z "$MOTHERDUCK_TOKEN" ]; then
+        echo "⚠ Warning: MOTHERDUCK_TOKEN environment variable not set"
+        echo "  Set it with: export MOTHERDUCK_TOKEN=your-token"
+    fi
+
+# Run baseline and show status (common pattern)
+load: baseline status
+
+# Apply all deltas sequentially with status after each
+deltas-verbose: (delta "1") status (delta "2") status (delta "3") status
+
+# ==========================================================================
+# Custom Recipes (Add your own project-specific recipes here)
+# ==========================================================================
+
+# Example: Run YOUR dbt models against the demo sources
+# Uncomment and customize for your project:
+#
+# run-my-models:
+#     @echo "Running my dbt models..."
+#     dbt build --profile my_project
+#     @echo "✓ Models built"
+#
+# test-incremental: baseline run-my-models (delta "1") run-my-models
+#     @echo "✓ Incremental testing complete"
+
+# ==========================================================================
+# Documentation and Help
+# ==========================================================================
+
+# Show detailed help with examples
+help:
+    @echo ""
+    @echo "┌─────────────────────────────────────────────────────────────┐"
+    @echo "│ Demo Source Operations (dbt-demo-source-ops)                │"
+    @echo "└─────────────────────────────────────────────────────────────┘"
+    @echo ""
+    @echo "Quick Start:"
+    @echo "  just init           # Setup everything and load baseline"
+    @echo "  just full-demo      # Run through all 3 days of changes"
+    @echo ""
+    @echo "Core Operations:"
+    @echo "  just baseline       # Load Day 0 (100 customers, 500 orders)"
+    @echo "  just verify         # Verify data was loaded correctly"
+    @echo "  just status         # Show current row counts"
+    @echo "  just delta 1        # Apply Day 1 changes"
+    @echo "  just delta 2        # Apply Day 2 changes"
+    @echo "  just delta 3        # Apply Day 3 changes"
+    @echo "  just reset          # Truncate and reload baseline"
+    @echo ""
+    @echo "Data Quality:"
+    @echo "  just soda-scan      # Run quality checks on both databases"
+    @echo "  just soda-shop      # Check jaffle_shop only"
+    @echo "  just soda-crm       # Check jaffle_crm only"
+    @echo ""
+    @echo "Configuration:"
+    @echo "  profile={{profile}}   (default)"
+    @echo "  target={{target}}     (default)"
+    @echo ""
+    @echo "Override variables:"
+    @echo "  just profile=my_project baseline"
+    @echo "  just target=motherduck baseline"
+    @echo "  just profile=my_proj target=motherduck full-demo"
+    @echo ""
+    @echo "Target options:"
+    @echo "  dev          Local DuckDB (default)"
+    @echo "  motherduck   MotherDuck cloud (requires MOTHERDUCK_TOKEN)"
+    @echo "  azure        Azure SQL (requires Azure credentials)"
+    @echo ""
+    @echo "More commands:"
+    @echo "  just --list         # List all available recipes"
+    @echo "  just --show recipe  # Show recipe definition"
+    @echo ""
+
+# ==========================================================================
+# Notes
+# ==========================================================================
+#
+# Why justfile vs Makefile?
+# - Cleaner syntax (no tabs vs spaces issues)
+# - Better error messages
+# - Cross-platform (works on Windows without WSL)
+# - Recipe parameters (like 'delta day')
+# - Built-in help with --list
+# - No .PHONY declarations needed
+#
+# Customization Tips:
+# 1. Copy this file to your project root: cp extras/scripts/justfile .
+# 2. Change profile default to your project's profile name
+# 3. Add custom recipes for your dbt models
+# 4. Use recipe parameters for flexibility
+#
+# Advanced Features:
+# - Recipe parameters: delta day
+# - Recipe dependencies: full-demo: baseline (delta "1") (delta "2")
+# - Multi-line shell scripts with shebang: #!/usr/bin/env bash
+# - String interpolation: {{variable}}
+# - Conditional execution: if statements in recipes
+#
+# Learn more: https://github.com/casey/just
+#
+# ==========================================================================

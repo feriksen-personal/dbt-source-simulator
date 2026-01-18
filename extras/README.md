@@ -161,21 +161,106 @@ cp extras/vscode/tasks.json .vscode/tasks.json
 
 ### 5. Makefile / justfile
 
+#### Option A: Makefile (traditional, widely available)
+
 ```bash
 # Copy to your project root
 cp extras/scripts/Makefile .
 
-# Use with:
-make help           # Show all commands
-make baseline       # Load baseline data
-make delta-1        # Apply Day 1 changes
-make full-demo      # Run through all 3 days
+# Show all available commands
+make help
 
-# Or with justfile:
-cp extras/scripts/justfile .
-just --list         # Show all commands
-just baseline       # Load baseline data
+# Core operations
+make setup          # Install dbt package dependencies
+make baseline       # Load baseline data (Day 0)
+make verify         # Verify baseline was loaded correctly
+make status         # Show current row counts
+make delta-1        # Apply Day 1 changes
+make delta-2        # Apply Day 2 changes
+make delta-3        # Apply Day 3 changes
+make reset          # Truncate and reload baseline
+
+# Data quality (Soda Core)
+make soda-scan      # Run quality checks on both databases
+make soda-shop      # Check jaffle_shop only
+make soda-crm       # Check jaffle_crm only
+
+# Workflows (combine multiple operations)
+make init           # setup + baseline + verify + status
+make full-demo      # baseline + delta-1 + delta-2 + delta-3 + status
+make test-workflow  # full-demo + soda-scan
+
+# Cleanup
+make clean          # Remove DuckDB database files (local only)
+
+# Override profile or target
+make baseline PROFILE=my_project
+make baseline TARGET=motherduck
+make baseline PROFILE=my_project TARGET=motherduck
+
+# Configuration variables:
+# - PROFILE (default: demo_source)
+# - TARGET (default: dev)
+# - SODA_CONFIG (default: extras/soda/configuration.yml)
 ```
+
+#### Option B: justfile (modern alternative, better syntax)
+
+```bash
+# Install just: https://github.com/casey/just#installation
+# macOS: brew install just
+# Linux: cargo install just
+
+# Copy to your project root
+cp extras/scripts/justfile .
+
+# Show all available recipes
+just --list
+
+# Core operations (same as Makefile)
+just setup
+just baseline
+just verify
+just status
+just delta 1        # Note: justfile uses parameters instead of delta-1
+just delta 2
+just delta 3
+just reset
+
+# Data quality
+just soda-scan
+just soda-shop
+just soda-crm
+
+# Workflows
+just init
+just full-demo
+just test-workflow
+
+# Cleanup
+just clean
+
+# Override variables
+just profile=my_project baseline
+just target=motherduck baseline
+just profile=my_proj target=motherduck full-demo
+
+# Show detailed help
+just help
+
+# Advantages of justfile:
+# - No tabs vs spaces issues
+# - Better error messages
+# - Recipe parameters (delta 1 vs delta-1)
+# - Cross-platform (works on Windows)
+# - Cleaner syntax
+```
+
+#### Which to use?
+
+- **Makefile**: If your team already uses make, stick with it
+- **justfile**: If starting fresh, just has better ergonomics and fewer pitfalls
+- **Both**: Copy both files and let team members choose their preference
 
 ### 6. GitHub Actions
 
