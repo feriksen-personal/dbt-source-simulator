@@ -276,69 +276,112 @@ jobs:
         if: always()
         run: dbt run-operation demo_reset --profile demo_source --target databricks
 
-  # Temporarily disabled - ODCS contracts need format fixes (fields should be dict, not list)
-  # Will be re-enabled in follow-up PR after contract restructuring
-  # validate-odcs-contracts:
-  #   name: Validate ODCS Contracts (datacontract-cli)
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: '3.11'
-  #     - name: Install dbt-duckdb
-  #       run: pip install dbt-core dbt-duckdb
-  #     - name: Install datacontract-cli
-  #       run: pip install datacontract-cli
-  #     - name: Set up dbt profile
-  #       run: |
-  #         mkdir -p ~/.dbt
-  #         cat > ~/.dbt/profiles.yml <<EOF
-  #         demo_source:
-  #           target: dev
-  #           outputs:
-  #             dev:
-  #               type: duckdb
-  #               path: 'data/demo_source.duckdb'
-  #         EOF
-  #     - name: Install dbt dependencies
-  #       run: dbt deps --profile demo_source
-  #     - name: Load baseline data
-  #       run: dbt run-operation demo_load_baseline --profile demo_source
-  #     - name: Validate ODCS contract - jaffle_shop.customers
-  #       run: |
-  #         datacontract test \
-  #           extras/data_quality/bitol/contracts/jaffle_shop_customers.yml
-  #     - name: Validate ODCS contract - jaffle_shop.orders
-  #       run: |
-  #         datacontract test \
-  #           extras/data_quality/bitol/contracts/jaffle_shop_orders.yml
-  #     - name: Validate ODCS contract - jaffle_crm.campaigns
-  #       run: |
-  #         datacontract test \
-  #           extras/data_quality/bitol/contracts/jaffle_crm_campaigns.yml
-  #     - name: Generate documentation from contracts
-  #       run: |
-  #         mkdir -p contract-docs
-  #         datacontract export \
-  #           extras/data_quality/bitol/contracts/jaffle_shop_customers.yml \
-  #           --format html > contract-docs/customers.html
-  #         datacontract export \
-  #           extras/data_quality/bitol/contracts/jaffle_shop_orders.yml \
-  #           --format html > contract-docs/orders.html
-  #     - name: Upload contract documentation
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: odcs-contract-docs
-  #         path: contract-docs/
-  #         retention-days: 30
+  validate-odcs-contracts:
+    name: Validate ODCS Contracts (datacontract-cli)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt-duckdb
+        run: pip install dbt-core dbt-duckdb
+
+      - name: Install datacontract-cli
+        run: pip install datacontract-cli
+
+      - name: Set up dbt profile
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml <<EOF
+          demo_source:
+            target: dev
+            outputs:
+              dev:
+                type: duckdb
+                path: 'data/demo_source.duckdb'
+          EOF
+
+      - name: Install dbt dependencies
+        run: dbt deps --profile demo_source
+
+      - name: Load baseline data
+        run: dbt run-operation demo_load_baseline --profile demo_source
+
+      # Validate jaffle_shop contracts
+      - name: Validate ODCS contract - jaffle_shop.customers
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_shop_customers.yml
+
+      - name: Validate ODCS contract - jaffle_shop.products
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_shop_products.yml
+
+      - name: Validate ODCS contract - jaffle_shop.orders
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_shop_orders.yml
+
+      - name: Validate ODCS contract - jaffle_shop.order_items
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_shop_order_items.yml
+
+      - name: Validate ODCS contract - jaffle_shop.payments
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_shop_payments.yml
+
+      # Validate jaffle_crm contracts
+      - name: Validate ODCS contract - jaffle_crm.campaigns
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_crm_campaigns.yml
+
+      - name: Validate ODCS contract - jaffle_crm.email_activity
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_crm_email_activity.yml
+
+      - name: Validate ODCS contract - jaffle_crm.web_sessions
+        run: datacontract test extras/data_quality/bitol/contracts/jaffle_crm_web_sessions.yml
+
+      # Generate documentation from contracts
+      - name: Generate ODCS contract documentation
+        if: always()
+        run: |
+          mkdir -p contract-docs
+
+          # Generate HTML documentation for each contract
+          datacontract export extras/data_quality/bitol/contracts/jaffle_shop_customers.yml \
+            --format html > contract-docs/jaffle_shop_customers.html
+
+          datacontract export extras/data_quality/bitol/contracts/jaffle_shop_products.yml \
+            --format html > contract-docs/jaffle_shop_products.html
+
+          datacontract export extras/data_quality/bitol/contracts/jaffle_shop_orders.yml \
+            --format html > contract-docs/jaffle_shop_orders.html
+
+          datacontract export extras/data_quality/bitol/contracts/jaffle_shop_order_items.yml \
+            --format html > contract-docs/jaffle_shop_order_items.html
+
+          datacontract export extras/data_quality/bitol/contracts/jaffle_shop_payments.yml \
+            --format html > contract-docs/jaffle_shop_payments.html
+
+          datacontract export extras/data_quality/bitol/contracts/jaffle_crm_campaigns.yml \
+            --format html > contract-docs/jaffle_crm_campaigns.html
+
+          datacontract export extras/data_quality/bitol/contracts/jaffle_crm_email_activity.yml \
+            --format html > contract-docs/jaffle_crm_email_activity.html
+
+          datacontract export extras/data_quality/bitol/contracts/jaffle_crm_web_sessions.yml \
+            --format html > contract-docs/jaffle_crm_web_sessions.html
+
+      - name: Upload ODCS contract documentation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odcs-contract-docs
+          path: contract-docs/
+          retention-days: 30
 
   summary:
     name: Data Quality Validation Summary
     runs-on: ubuntu-latest
-    needs: [validate-soda-duckdb]
+    needs: [validate-soda-duckdb, validate-odcs-contracts]
     if: always()
 
     steps:
@@ -348,15 +391,35 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Soda Contracts (DuckDB) | ${{ needs.validate-soda-duckdb.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "> **Note**: ODCS contract validation temporarily disabled pending format fixes" >> $GITHUB_STEP_SUMMARY
+          echo "| Soda Contracts & Scans (DuckDB) | ${{ needs.validate-soda-duckdb.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ODCS Contracts (datacontract-cli) | ${{ needs.validate-odcs-contracts.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          if [[ "${{ needs.validate-soda-duckdb.result }}" == "success" ]]; then
+          if [[ "${{ needs.validate-soda-duckdb.result }}" == "success" ]] && [[ "${{ needs.validate-odcs-contracts.result }}" == "success" ]]; then
             echo "✅ All data quality validations passed!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Validated Components" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Soda Core**:" >> $GITHUB_STEP_SUMMARY
+            echo "- Generic data quality contracts (production patterns)" >> $GITHUB_STEP_SUMMARY
+            echo "- Deterministic integration tests (baseline + 3 daily deltas)" >> $GITHUB_STEP_SUMMARY
+            echo "- Referential integrity checks" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**ODCS (Open Data Contract Standard)**:" >> $GITHUB_STEP_SUMMARY
+            echo "- 8 data contracts validated against DuckDB" >> $GITHUB_STEP_SUMMARY
+            echo "- Generic quality patterns (append-only, soft deletes)" >> $GITHUB_STEP_SUMMARY
+            echo "- Documentation artifacts generated" >> $GITHUB_STEP_SUMMARY
             exit 0
           else
             echo "❌ Some data quality validations failed. Review the logs above." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Failed Checks" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            if [[ "${{ needs.validate-soda-duckdb.result }}" != "success" ]]; then
+              echo "- ❌ Soda Contracts & Scans (DuckDB)" >> $GITHUB_STEP_SUMMARY
+            fi
+            if [[ "${{ needs.validate-odcs-contracts.result }}" != "success" ]]; then
+              echo "- ❌ ODCS Contracts (datacontract-cli)" >> $GITHUB_STEP_SUMMARY
+            fi
             exit 1
           fi
