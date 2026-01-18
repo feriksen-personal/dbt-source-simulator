@@ -9,186 +9,15 @@
 
 **Control plane for managing stable, versioned source system emulations** - Four simple operations: load baseline, apply deltas, reset, and check status.
 
-**[Quick Start](#quick-copy-paste-setup)** • **[Wiki Documentation](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)** • **[Operations Guide](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
+**Simulates upstream source systems with deterministic, incremental data** — giving your ingestion pipelines stable, versioned databases to pull from. Test Lakeflow Connect, Fivetran, CDC patterns, or custom ingestion against controlled source evolution.
+
+# dbt-origin-simulator-ops
+
+**[Quick Start](#quick-start)** • **[Wiki](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)** • **[Operations Guide](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
 
 ---
 
-## Use Cases
-
-### 1. Local Development (DuckDB)
-
-**Zero cloud costs, instant setup, complete isolation:**
-
-- Fully local source databases with no external dependencies
-- Complete dbt development environment in seconds
-- Perfect for learning, testing, offline development
-- Ideal for CI/CD pipelines
-
-### 2. Collaborative Development (MotherDuck)
-
-**Cloud-native DuckDB with team access:**
-
-- Shared source databases across your team
-- Free tier available (no credit card required)
-- Same DuckDB experience, cloud-hosted
-- Perfect for distributed teams and remote demos
-
-### 3. Lakehouse Workflows (Databricks)
-
-**Unity Catalog and Delta Lake patterns:**
-
-- Databricks SQL Warehouse sources with Delta Lake tables
-- Test lakehouse ingestion patterns and Lakeflow Connect
-- Practice Unity Catalog governance workflows
-- Rich metadata with column comments, schema descriptions, and catalog tags
-
-### 4. Cloud Demos & POCs (Azure SQL)
-
-**Enterprise database patterns with CDC:**
-
-- Azure SQL sources with change tracking enabled
-- Demonstrate incremental loads, SCD Type 2, CDC workflows
-- Infrastructure provisioned via [dbt-origin-simulator-infra](https://github.com/feriksen-personal/dbt-origin-simulator-infra)
-- **Note:** For demo/POC purposes only, not production
-
----
-
-## Why This Package?
-
-When developing data pipelines, you need realistic source databases that you can initialize, evolve over time, and reset instantly. This package acts as a **control plane for managing stable, versioned source system emulations** across multiple platforms (DuckDB, MotherDuck, Azure SQL, Databricks) without maintaining complex seeding scripts or manually recreating databases.
-
-**Unlike traditional databases** (AdventureWorks, Willibald) which provide static datasets for learning SQL and data modeling, this package focuses on **data engineering infrastructure patterns**: incremental loads, CDC, change tracking, SCD Type 2, and pipeline orchestration. The four operations (`load_baseline`, `apply_delta`, `reset`, `status`) let you simulate realistic source system evolution in a controlled, reproducible way—perfect for:
-
-- **Testing pipeline orchestration** - Lakeflow Connect, Databricks workflows, Airflow DAGs
-- **Developing ingestion patterns** - Incremental loads, CDC detection, change tracking
-- **Learning data engineering** - How source systems evolve, not just querying static data
-- **CI/CD testing** - Reproducible source state for automated tests
-- **Workshops and training** - Consistent, resettable demo environments
-
-While built with dbt operations for convenience, the managed source databases can be used by **any data pipeline tool or workflow** - Spark jobs, Python scripts, SQL queries, Fivetran, or standalone applications that need consistent, evolving test data.
-
-**Key Benefits:**
-
-- ✅ **Zero Configuration** - Works out of the box with sensible defaults
-- 🔄 **Deterministic & Reproducible** - Same data every run, reset to baseline instantly
-- 📊 **Realistic Data** - Two source systems (ERP + CRM) with proper relationships
-- 🎯 **Four Simple Operations** - `load_baseline`, `apply_delta`, `reset`, `status`
-- 🌐 **Multi-Platform** - DuckDB, MotherDuck, Databricks, Azure SQL
-- 💰 **Cost Effective** - Free tier options for all platforms
-- 📈 **Production Patterns** - CDC, SCD Type 2, soft deletes, incremental loads
-- 🔧 **Tool Agnostic** - Use with dbt, Spark, Python, Fivetran, or any data tool
-
-See the [wiki](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki) for detailed use cases and patterns.
-
----
-
-## Why Deterministic Data?
-
-Unlike random data generators, this package provides **deterministic, reproducible data evolution** - the same data every time you run it. This matters when you need to verify expected results, demonstrate consistent outcomes, or train multiple people with identical datasets.
-
-**Deterministic Evolution:**
-
-```bash
-# Run 1: Baseline
-dbt run-operation demo_load_baseline
-# → Always creates exactly 5 customers, 5 products, 5 orders
-
-# Run 2: Day 1 Delta
-dbt run-operation demo_apply_delta --args '{day: 1}'
-# → Always adds customer ID 6, orders 6-8
-# → Always results in 6 customers, 5 products, 8 orders
-
-# Run 100: Same results every time
-# → Reproducible for demos, reliable for testing
-```
-
-**This means you can:**
-
-- 📋 **Document expected results** - "After Day 2, customer 5 should have 3 orders"
-- ✅ **Write assertions** - `assert(customer_count == 6)` in your CI tests
-- 🎯 **Demo consistently** - Show the same data story every time
-- 👥 **Train effectively** - All students see identical results
-- 🐛 **Debug confidently** - Know what the data *should* be at each step
-
-**When to use this package:**
-
-- Sales demos and POCs (consistent narrative)
-- dbt workshops and training (same results for all students)
-- Testing incremental models (known deltas)
-- Validating transformation logic (expected outcomes)
-- Debugging data pipelines (reproducible state)
-
-**When to use random generation instead:**
-
-- Large-scale performance testing
-- Fuzzing for edge cases
-- Generating thousands of unique realistic values
-- Populating production-scale volumes
-
----
-
-## Supported Platforms
-
-| Platform        | Use Case                          | Free Tier | Status              |
-|-----------------|-----------------------------------|-----------|---------------------|
-| **DuckDB**      | Local development, CI/CD          | ✅ Free   | ✅ Fully supported  |
-| **MotherDuck**  | Cloud collaboration, remote demos | ✅ Free   | ✅ Fully supported  |
-| **Databricks**  | Unity Catalog, Delta Lake         | ✅ Free   | ✅ Fully supported  |
-| **Azure SQL**   | CDC patterns, change tracking     | ✅ Free   | ⚠️ In development   |
-
----
-
-## Quick Copy-Paste Setup
-
-**Step 1:** Add to `packages.yml`
-
-```yaml
-packages:
-  - git: "https://github.com/feriksen-personal/dbt-origin-simulator-ops"
-    revision: v1.0.0
-```
-
-**Step 2:** Install and run
-
-```bash
-dbt deps
-dbt run-operation demo_load_baseline --profile demo_source
-```
-
-That's it! 🎉 **[See all operations →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
-
----
-
-## Operations Reference
-
-| Operation | Purpose | Idempotent | Destructive | Usage |
-|-----------|---------|:----------:|:-----------:|-------|
-| [`demo_load_baseline`](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide#demo_load_baseline) | Initialize with Day 0 data | ✅ | ❌ | `dbt run-operation demo_load_baseline --profile demo_source` |
-| [`demo_apply_delta`](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide#demo_apply_delta) | Apply day 1/2/3 changes | ❌ | ❌ | `dbt run-operation demo_apply_delta --args '{day: 1}' --profile demo_source` |
-| [`demo_reset`](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide#demo_reset) | Truncate and reload baseline | ✅ | ✅ | `dbt run-operation demo_reset --profile demo_source` |
-| [`demo_status`](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide#demo_status) | Show current row counts | ✅ | ❌ | `dbt run-operation demo_status --profile demo_source` |
-
-📚 **[Detailed Operation Guide →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
-
----
-
-## Installation & Setup
-
-### Prerequisites
-
-- **dbt Core** >= 1.10.0
-- **Adapter** (choose one or more):
-  - **dbt-duckdb** >= 1.10.0 for DuckDB and MotherDuck
-  - **dbt-databricks** >= 1.10.0 for Databricks
-  - **dbt-sqlserver** >= 1.10.0 for Azure SQL
-
-**Optional:**
-
-- Azure SQL databases via [dbt-origin-simulator-infra](https://github.com/feriksen-personal/dbt-origin-simulator-infra)
-- [MotherDuck account](https://motherduck.com) (free tier available)
-- [Databricks workspace](https://databricks.com/try-databricks) (community edition available)
-
-### Install Package
+## Quick Start
 
 ```yaml
 # packages.yml
@@ -199,185 +28,166 @@ packages:
 
 ```bash
 dbt deps
-```
-
-### Configure Profile
-
-**DuckDB (local):**
-
-```yaml
-# profiles.yml
-demo_source:
-  target: dev
-  outputs:
-    dev:
-      type: duckdb
-      path: 'data/demo_source.duckdb'
-```
-
-**MotherDuck (cloud):**
-
-```yaml
-# profiles.yml
-demo_source:
-  target: motherduck
-  outputs:
-    motherduck:
-      type: duckdb
-      path: 'md:demo_source'
-      token: "{{ env_var('MOTHERDUCK_TOKEN') }}"
-```
-
-Get your token at [motherduck.com/settings/tokens](https://motherduck.com/settings/tokens):
-
-```bash
-export MOTHERDUCK_TOKEN=your-token-here
-```
-
-**Databricks (cloud):**
-
-```yaml
-# profiles.yml
-demo_source:
-  target: databricks
-  outputs:
-    databricks:
-      type: databricks
-      host: "{{ env_var('DATABRICKS_SERVER_HOSTNAME') }}"
-      http_path: "{{ env_var('DATABRICKS_HTTP_PATH') }}"
-      token: "{{ env_var('DATABRICKS_TOKEN') }}"
-      catalog: "{{ env_var('DATABRICKS_CATALOG') }}"
-      schema: default
-      threads: 4
-```
-
-Set environment variables:
-
-```bash
-export DATABRICKS_SERVER_HOSTNAME=your-workspace.cloud.databricks.com
-export DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
-export DATABRICKS_TOKEN=your-personal-access-token
-export DATABRICKS_CATALOG=main
-```
-
-Get your token from **User Settings → Developer → Access tokens** in your Databricks workspace.
-
-**Azure SQL (cloud):**
-
-```yaml
-# profiles.yml
-demo_source:
-  target: azure
-  outputs:
-    azure:
-      type: sqlserver
-      server: "{{ env_var('DEMO_SQL_SERVER') }}.database.windows.net"
-      database: master
-      user: "{{ env_var('DEMO_SQL_USER') }}"
-      password: "{{ env_var('DEMO_SQL_PASSWORD') }}"
-      encrypt: true
-      trust_cert: false
-```
-
-Set environment variables:
-
-```bash
-export DEMO_SQL_SERVER=your-server-name
-export DEMO_SQL_USER=sqladmin
-export DEMO_SQL_PASSWORD=your-password
-```
-
-### Run Operations
-
-```bash
-# Load baseline data
 dbt run-operation demo_load_baseline --profile demo_source
-
-# Check status
-dbt run-operation demo_status --profile demo_source
-
-# Apply deltas
 dbt run-operation demo_apply_delta --args '{day: 1}' --profile demo_source
-
-# Reset to baseline
-dbt run-operation demo_reset --profile demo_source
+dbt run-operation demo_status --profile demo_source
 ```
 
-📖 **[Step-by-step setup guide →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Getting-Started)**
+> ⚠️ Always use `--profile` to target your source database connection — never run against your default (target) profile. The VS Code tasks in `extras/` handle this automatically.
 
 ---
 
-## Data Schemas
+## What This Creates
 
-**jaffle_shop** (e-commerce):
+This package creates and manages **source databases** — the upstream systems your pipelines ingest *from*, not the destination.
 
-- **[customers](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#customers)** - Customer records with email addresses and soft delete tracking
-- **[products](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#products)** - Product catalog with pricing and categories
-- **[orders](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#orders)** - Order transactions with status tracking and customer relationships
-- **[order_items](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#order_items)** - Line items linking products to orders with quantities and pricing
-- **[payments](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#payments)** - Payment records linked to orders (added in deltas)
+Two simulated systems (inspired by dbt Labs' [Jaffle Shop](https://github.com/dbt-labs/jaffle_shop)):
+- **jaffle_shop** — ERP/e-commerce: customers, products, orders, order_items, payments
+- **jaffle_crm** — Marketing platform: campaigns, email_activity, web_sessions
 
-**jaffle_crm** (marketing):
-
-- **[campaigns](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#campaigns)** - Marketing campaigns with budgets and dates
-- **[email_activity](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#email_activity)** - Email engagement metrics (sent, opened, clicked)
-- **[web_sessions](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas#web_sessions)** - Website session tracking with page views
-
-📊 **[Complete schema documentation with ID ranges →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas)**
+Your dbt project, Lakeflow Connect, Fivetran, or Spark jobs consume these as external sources.
 
 ---
 
-## What's Inside
+## Core Concepts
 
-```
-dbt-origin-simulator-ops/
-├── macros/              # Four operations: load_baseline, apply_delta, reset, status
-├── data/
-│   ├── duckdb/         # DuckDB/MotherDuck SQL files (baseline, deltas, utilities)
-│   ├── databricks/     # Databricks SQL files (Unity Catalog, Delta Lake)
-│   └── azure/          # Azure SQL files (in development)
-├── extras/              # Optional templates for your project
-│   ├── dbt/            # sources.yml, profiles.yml examples
-│   ├── soda/           # Data quality contracts
-│   ├── vscode/         # VS Code tasks for Command Palette
-│   └── cicd/           # GitHub Actions workflow examples
-└── scripts/             # Development and testing scripts
-```
+**Source-side simulation** — This package manages the databases your pipelines ingest *from*, not your target warehouse. Think of it as a controllable stand-in for production ERP, CRM, and marketing systems.
+
+**Deterministic** — Same data every run. Customer #6 always appears in Day 1. Order #12 always gets updated in Day 2. Write assertions, document expected results, debug with confidence.
+
+**Incremental** — Controlled progression through deltas. Each delta introduces new records, updates existing ones, and soft-deletes others — mirroring real source system behavior over time.
+
+**Portable** — Develop locally on DuckDB (zero cost), deploy source databases to Databricks or Azure SQL. Same schemas, same increments, different platforms.
+
+---
+
+## Operations
+
+| Operation | Purpose | Example |
+| --- | --- | --- |
+| `demo_load_baseline` | Initialize source systems with Day 0 data | `dbt run-operation demo_load_baseline --profile demo_source` |
+| `demo_apply_delta` | Apply incremental changes (day 1/2/3) | `dbt run-operation demo_apply_delta --args '{day: 1}' --profile demo_source` |
+| `demo_reset` | Reset sources to baseline state | `dbt run-operation demo_reset --profile demo_source` |
+| `demo_status` | Inspect current source state | `dbt run-operation demo_status --profile demo_source` |
+
+📚 **[Detailed Operations Guide →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
+
+---
+
+## Use Cases
+
+**Validate ingestion and transformation** — Test dbt projects, Lakeflow Connect, Fivetran, or custom CDC against sources that increment predictably. Know exactly what changed between Day 1 and Day 2.
+
+**Verify SCD Type 2 logic** — Deterministic updates and soft deletes let you validate historization patterns. Confirm your slowly changing dimension logic handles updates, deletes, and restatements correctly.
+
+**Test CDC/change tracking** — Azure SQL sources with change tracking enabled, letting you validate SQL Server-native CDC ingestion patterns before hitting production.
+
+**CI/CD for pipelines** — Spin up source databases in GitHub Actions (DuckDB), run your full ingestion + transformation pipeline, assert on known outcomes. No cloud costs for testing.
+
+**Develop locally, deploy to cloud** — Build ingestion logic against local DuckDB sources, then deploy the same pipeline against Databricks or Azure SQL sources. Same data, same increments.
+
+**Workshops and demos** — Everyone connects to identical source systems. Reset between sessions in seconds. Demonstrate incremental loads with predictable before/after states.
+
+---
+
+## Batteries Included
+
+The `extras/` folder provides production-ready templates:
+
+**dbt integration**
+- `sources.yml` — Complete source definitions with column descriptions and freshness checks
+- `profiles.yml.example` — Connection templates for DuckDB, MotherDuck, Databricks, Azure SQL
+
+**Data quality — Soda Core**
+- `contracts/` — Generic validation patterns (schema, integrity, business rules)
+- `scans/` — Deterministic integration tests with exact row counts per state (baseline, day 1, day 2, day 3)
+
+**Data quality — ODCS (Bitol)**
+- Eight Open Data Contract Standard definitions (one per table)
+- Compatible with `datacontract-cli` for validation and code generation
+
+**Developer experience**
+- `tasks.json` — VS Code Command Palette actions for all operations
+- `github-actions.yml` — CI/CD workflow with baseline, incremental, and matrix testing jobs
+
+📁 **[Extras documentation →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/tree/main/extras)** • **[Wiki →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)**
+
+---
+
+## Platforms
+
+| Platform | Source Database Use Case | Status |
+| --- | --- | --- |
+| **DuckDB** | Local sources for development, CI/CD | ✅ Supported |
+| **MotherDuck** | Shared sources for team collaboration | ✅ Supported |
+| **Databricks** | Unity Catalog sources, Delta Sharing | ✅ Supported |
+| **Azure SQL** | CDC-enabled sources, change tracking | ⚠️ In development |
+
+---
+
+## Source Schemas
+
+**jaffle_shop** (ERP/e-commerce)
+- `customers` — Soft deletes, email updates
+- `products` — Price changes, static catalog
+- `orders` — Status transitions, soft deletes
+- `order_items` — Append-only line items
+- `payments` — Append-only, added in deltas
+
+**jaffle_crm** (Marketing)
+- `campaigns` — Slowly changing reference data
+- `email_activity` — Append-only event stream
+- `web_sessions` — Append-only event stream
+
+All tables include `created_at`, `updated_at` for CDC detection.
+
+📊 **[Schema documentation with delta patterns →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas)**
 
 ---
 
 ## Configuration
 
 ```yaml
-# dbt_project.yml (optional overrides)
+# dbt_project.yml (optional)
 vars:
   origin_simulator_ops:
     shop_db: 'jaffle_shop'  # default
     crm_db: 'jaffle_crm'    # default
 ```
 
-**Note:** For MotherDuck, databases are created automatically. For Azure SQL, databases must be provisioned via the [infrastructure repo](https://github.com/feriksen-personal/dbt-origin-simulator-infra).
+Profile examples for each platform: **[Setup Guide →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Getting-Started)**
 
-For detailed documentation, see the [project wiki](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)
+---
+
+## Project Structure
+
+```
+dbt-origin-simulator-ops/
+├── macros/                     # Four operations
+├── data/
+│   ├── duckdb/                 # DuckDB/MotherDuck source definitions
+│   ├── databricks/             # Unity Catalog source definitions
+│   └── azure/                  # Azure SQL sources (in development)
+├── extras/
+│   ├── dbt/                    # sources.yml, profiles.yml.example
+│   ├── data_quality/
+│   │   ├── soda/               # Contracts + deterministic scans
+│   │   └── bitol/              # ODCS contracts (datacontract-cli compatible)
+│   ├── vscode/                 # Command palette tasks
+│   └── cicd/                   # GitHub Actions workflow
+└── scripts/                    # Development utilities
+```
 
 ---
 
 ## Contributing
 
-Contributions welcome! Please open an issue or submit a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
-
-## Acknowledgments
-
-- Built to complement [dbt-origin-simulator-infra](https://github.com/feriksen-personal/dbt-origin-simulator-infra) infrastructure repo
-- Inspired by the [Jaffle Shop](https://github.com/dbt-labs/jaffle_shop) demo project
-
----
+Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT — see [LICENSE](LICENSE).
+
 
 ---
 
