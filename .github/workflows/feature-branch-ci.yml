@@ -1,8 +1,9 @@
-name: Main Branch CI
+name: Feature Branch CI
 
 on:
   push:
-    branches: [main]
+    branches-ignore:
+      - main
 
 jobs:
   validate-dbt-config:
@@ -111,10 +112,13 @@ jobs:
           test -d macros/_internal || (echo "Missing macros/_internal" && exit 1)
           test -d data || (echo "Missing data/ directory" && exit 1)
 
-          # Check optional directories (warnings only for incremental development)
+          # Check platform directories (warnings only for incremental development)
           test -d data/duckdb/baseline || echo "⚠ data/duckdb/baseline not yet created"
           test -d data/duckdb/deltas || echo "⚠ data/duckdb/deltas not yet created"
           test -d data/duckdb/utilities || echo "⚠ data/duckdb/utilities not yet created"
+          test -d data/databricks/baseline || echo "⚠ data/databricks/baseline not yet created"
+          test -d data/databricks/deltas || echo "⚠ data/databricks/deltas not yet created"
+          test -d data/databricks/utilities || echo "⚠ data/databricks/utilities not yet created"
           test -d data/azure/baseline || echo "⚠ data/azure/baseline not yet created"
           test -d data/azure/deltas || echo "⚠ data/azure/deltas not yet created"
           test -d data/azure/utilities || echo "⚠ data/azure/utilities not yet created"
@@ -124,9 +128,6 @@ jobs:
   test-duckdb:
     name: Test DuckDB Operations
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -173,23 +174,6 @@ jobs:
           echo "=== Testing demo_status ==="
           dbt run-operation demo_status --profile demo_source
 
-      # TODO: Re-enable delta tests after Issue #40 is resolved
-      # Currently blocked: baseline has 5 customers, deltas reference IDs 6-125
-      # - name: Test demo_apply_delta (day 1)
-      #   run: |
-      #     echo "=== Testing demo_apply_delta day 1 ==="
-      #     dbt run-operation demo_apply_delta --args '{day: 1}' --profile demo_source
-      #
-      # - name: Test demo_apply_delta (day 2)
-      #   run: |
-      #     echo "=== Testing demo_apply_delta day 2 ==="
-      #     dbt run-operation demo_apply_delta --args '{day: 2}' --profile demo_source
-      #
-      # - name: Test demo_apply_delta (day 3)
-      #   run: |
-      #     echo "=== Testing demo_apply_delta day 3 ==="
-      #     dbt run-operation demo_apply_delta --args '{day: 3}' --profile demo_source
-
       - name: Test demo_reset
         run: |
           echo "=== Testing demo_reset ==="
@@ -204,57 +188,3 @@ jobs:
         run: |
           echo "=== Final status check ==="
           dbt run-operation demo_status --profile demo_source
-
-      - name: Post test results to PR
-        if: github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          # Convert verification output to markdown tables
-          convert_to_markdown() {
-            local input="$1"
-            local output="$2"
-
-            # Create markdown table header
-            echo "| Database.Table | Expected | Actual | Status |" > "$output"
-            echo "|----------------|----------|--------|--------|" >> "$output"
-
-            # Extract and convert table rows
-            grep "║.*│.*│.*│.*║" "$input" | \
-              grep -v "Database.Table" | \
-              grep -v "═" | \
-              grep -v "─" | \
-              sed 's/\x1b\[[0-9;]*m//g' | \
-              sed 's/^[0-9:]\{8\}  //g' | \
-              sed 's/║/|/g' | \
-              sed 's/│/|/g' | \
-              sed 's/|[[:space:]]*|/|/g' | \
-              sed 's/|[[:space:]]/| /g' | \
-              sed 's/[[:space:]]|/ |/g' >> "$output"
-          }
-
-          convert_to_markdown /tmp/verify_baseline.log /tmp/baseline_table.md
-          convert_to_markdown /tmp/verify_reset.log /tmp/reset_table.md
-
-          # Create PR comment
-          cat > /tmp/pr_comment.md << 'EOF'
-          ## 🧪 DuckDB Test Results
-
-          ### ✓ Baseline Load Verification
-
-          EOF
-          cat /tmp/baseline_table.md >> /tmp/pr_comment.md
-          cat >> /tmp/pr_comment.md << 'EOF'
-
-          ### ✓ Reset Verification
-
-          EOF
-          cat /tmp/reset_table.md >> /tmp/pr_comment.md
-          cat >> /tmp/pr_comment.md << 'EOF'
-
-          ---
-          *Automated test results from CI workflow*
-          EOF
-
-          # Post comment to PR
-          gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment.md
