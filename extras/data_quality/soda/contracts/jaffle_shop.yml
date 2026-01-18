@@ -58,12 +58,12 @@ checks for customers:
 
   # Timestamp validation
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: updated_at is valid timestamp when present
   - invalid_count(deleted_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: deleted_at is valid timestamp when present
 
 # ============================================================================
@@ -108,9 +108,9 @@ checks for products:
 
   # Timestamp validation
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: updated_at is valid timestamp when present
 
 # ============================================================================
@@ -158,11 +158,11 @@ checks for orders:
 
   # Timestamp validation
   - invalid_count(order_date) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
 
   # SLA/Freshness check: Orders should be recent (within 60 days for full workflow)
   - freshness(order_date) < 60d:
@@ -227,9 +227,9 @@ checks for order_items:
 
   # Timestamp validation
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: updated_at is valid timestamp when present
 
 # ============================================================================
@@ -284,9 +284,9 @@ checks for payments:
 
   # Timestamp validation
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: updated_at is valid timestamp when present
 
   # SLA/Freshness check: Payments should be recent (within 60 days for full workflow)

@@ -53,14 +53,14 @@ checks for campaigns:
 
   # Timestamp validation
   - invalid_count(start_date) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(end_date) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: end_date is valid timestamp when present
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: updated_at is valid timestamp when present
 
   # Business rule: End date should be after start date (when present)
@@ -130,17 +130,17 @@ checks for email_activity:
 
   # Timestamp validation
   - invalid_count(sent_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(opened_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: opened_at is valid timestamp when present
   - invalid_count(clicked_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: clicked_at is valid timestamp when present
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: updated_at is valid timestamp when present
 
   # Business rules: Event sequence validation
@@ -209,14 +209,14 @@ checks for web_sessions:
 
   # Timestamp validation
   - invalid_count(session_start) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(session_end) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: session_end is valid timestamp when present
   - invalid_count(created_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
   - invalid_count(updated_at) = 0:
-      valid format: timestamp
+      valid format: timestamp 24h
       name: updated_at is valid timestamp when present
 
   # Business rule: Session end should be after session start (when present)
