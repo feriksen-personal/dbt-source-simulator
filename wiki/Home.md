@@ -52,7 +52,6 @@ Popular databases like **[AdventureWorks](https://learn.microsoft.com/en-us/sql/
 - Building BI dashboards and reports
 - Exploring schema design and normalization
 - Practicing data modeling
-- Testing Data Vault automation tools (Willibald)
 
 **Key characteristic**: Static, complete datasets
 
@@ -73,7 +72,7 @@ Popular databases like **[AdventureWorks](https://learn.microsoft.com/en-us/sql/
 | Scenario                                 | Traditional Demo DB    | This Package                                |
 | ---------------------------------------- | ---------------------- | ------------------------------------------- |
 | "How do I write a complex JOIN?"         | ✅ AdventureWorks      | ❌ Not the focus                            |
-| "How do I test Data Vault patterns?"     | ✅ Willibald           | ❌ Not the focus                            |
+| "How do I practice complex SQL?"         | ✅ Willibald           | ❌ Not the focus                            |
 | "How do I detect changed records?"       | ❌ Static data         | ✅ Apply deltas, observe changes            |
 | "How do I test incremental loads?"       | ❌ No state evolution  | ✅ Apply Day 1, then Day 2, then Day 3      |
 | "How does CDC work?"                     | ❌ No change tracking  | ✅ Azure SQL with change tracking enabled   |
