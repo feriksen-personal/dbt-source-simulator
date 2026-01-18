@@ -49,13 +49,13 @@
   {# Truncate jaffle_shop tables #}
   {{ origin_simulator_ops._log("→ Truncating jaffle_shop tables...") }}
   {% set truncate_shop_sql = origin_simulator_ops._get_sql('utilities/truncate_shop') %}
-  {% do run_query(truncate_shop_sql) %}
+  {% do origin_simulator_ops._run_sql(truncate_shop_sql) %}
   {{ origin_simulator_ops._log("  ✓ Truncated jaffle_shop tables") }}
 
   {# Truncate jaffle_crm tables #}
   {{ origin_simulator_ops._log("→ Truncating jaffle_crm tables...") }}
   {% set truncate_crm_sql = origin_simulator_ops._get_sql('utilities/truncate_crm') %}
-  {% do run_query(truncate_crm_sql) %}
+  {% do origin_simulator_ops._run_sql(truncate_crm_sql) %}
   {{ origin_simulator_ops._log("  ✓ Truncated jaffle_crm tables") }}
 
   {{ origin_simulator_ops._log("") }}
