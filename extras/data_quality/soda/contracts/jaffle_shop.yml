@@ -191,7 +191,7 @@ checks for jaffle_shop.payments:
 
   # Payment method validation
   - invalid_count(payment_method) = 0:
-      valid values: ['credit_card', 'debit_card', 'bank_transfer', 'gift_card']
+      valid values: ['credit_card', 'bank_transfer', 'gift_card', 'coupon']
       name: All payments have valid payment methods
 
   # Business rule: Payment amounts must be positive
