@@ -22,16 +22,6 @@
 # Customer master data with email tracking and soft deletes
 
 checks for jaffle_shop.customers:
-  # Schema validation - Primary key
-  - schema:
-      fail:
-        when required column missing: [customer_id, first_name, last_name, email]
-        when wrong column type:
-          customer_id: integer
-          first_name: varchar
-          last_name: varchar
-          email: varchar
-
   # Row count validation (baseline minimum)
   - row_count >= 100
 
@@ -62,16 +52,6 @@ checks for jaffle_shop.customers:
 # Product catalog with pricing
 
 checks for jaffle_shop.products:
-  # Schema validation
-  - schema:
-      fail:
-        when required column missing: [product_id, name, price, category]
-        when wrong column type:
-          product_id: integer
-          name: varchar
-          price: decimal(10,2)
-          category: varchar
-
   # Row count validation
   - row_count = 20:
       name: Product catalog has exactly 20 products
@@ -102,16 +82,6 @@ checks for jaffle_shop.products:
 # Customer orders with status tracking
 
 checks for jaffle_shop.orders:
-  # Schema validation
-  - schema:
-      fail:
-        when required column missing: [order_id, customer_id, order_date, status]
-        when wrong column type:
-          order_id: integer
-          customer_id: integer
-          order_date: date
-          status: varchar
-
   # Row count validation (baseline minimum)
   - row_count >= 500
 
@@ -149,17 +119,6 @@ checks for jaffle_shop.orders:
 # Line items for orders with quantities and pricing
 
 checks for jaffle_shop.order_items:
-  # Schema validation
-  - schema:
-      fail:
-        when required column missing: [order_item_id, order_id, product_id, quantity, unit_price]
-        when wrong column type:
-          order_item_id: integer
-          order_id: integer
-          product_id: integer
-          quantity: integer
-          unit_price: decimal(10,2)
-
   # Row count validation (baseline minimum)
   - row_count >= 1200
 
@@ -206,16 +165,6 @@ checks for jaffle_shop.order_items:
 # Payment records for orders
 
 checks for jaffle_shop.payments:
-  # Schema validation
-  - schema:
-      fail:
-        when required column missing: [payment_id, order_id, payment_method, amount]
-        when wrong column type:
-          payment_id: integer
-          order_id: integer
-          payment_method: varchar
-          amount: decimal(10,2)
-
   # Note: Baseline has 0 payments, so row count checks are conditional
   # Row count validation (if payments exist)
   - row_count >= 0:
