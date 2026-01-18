@@ -226,7 +226,7 @@ jobs:
           cat > /tmp/pr_comment.md << 'EOF'
           ## 🦆 DuckDB Integration Test Results
 
-          **Connection**: Local DuckDB database (`demo_source.duckdb`)
+          **Connection**: Local DuckDB database (`origin_simulator.duckdb`)
 
           ### ✓ Baseline Load Verification
 
