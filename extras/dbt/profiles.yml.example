@@ -6,11 +6,12 @@
 #   dbt run-operation demo_load_baseline --profile demo_source               # Uses default 'dev' target
 #   dbt run-operation demo_load_baseline --profile demo_source --target motherduck
 #   dbt run-operation demo_load_baseline --profile demo_source --target azure
+#   dbt run-operation demo_load_baseline --profile demo_source --target databricks
 #
 # Documentation: https://github.com/feriksen-personal/dbt-azure-demo-source-ops/wiki/Getting-Started
 
 demo_source:
-  target: dev  # Default target (change to motherduck or azure if preferred)
+  target: dev  # Default target (change to motherduck, azure, or databricks if preferred)
 
   outputs:
     # ========================================================================
@@ -76,6 +77,34 @@ demo_source:
       trust_cert: false      # Required for Azure SQL
       threads: 4
 
+    # ========================================================================
+    # Databricks - Unity Catalog & Delta Lake
+    # ========================================================================
+    # Use case: Lakehouse workflows, Delta Lake demos, Unity Catalog testing
+    # Requirements:
+    #   - pip install dbt-databricks
+    #   - Databricks workspace with SQL Warehouse
+    #   - Personal access token
+    #
+    # Setup environment variables:
+    #   export DATABRICKS_SERVER_HOSTNAME=your-workspace.cloud.databricks.com
+    #   export DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
+    #   export DATABRICKS_TOKEN=your-personal-access-token
+    #   export DATABRICKS_CATALOG=your-catalog-name
+    #
+    # Testing connection:
+    #   dbt debug --profile demo_source --target databricks
+    #
+    # Note: Creates schemas 'erp' (shop tables) and 'crm' (CRM tables) in your catalog
+    databricks:
+      type: databricks
+      host: "{{ env_var('DATABRICKS_SERVER_HOSTNAME') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH') }}"
+      token: "{{ env_var('DATABRICKS_TOKEN') }}"
+      catalog: "{{ env_var('DATABRICKS_CATALOG') }}"
+      schema: default  # Package creates 'erp' and 'crm' schemas
+      threads: 4
+
 # ============================================================================
 # Environment Variable Setup
 # ============================================================================
@@ -90,6 +119,12 @@ demo_source:
 #   export DEMO_SQL_USER=your-username
 #   export DEMO_SQL_PASSWORD=your-password
 #
+#   # Databricks
+#   export DATABRICKS_SERVER_HOSTNAME=your-workspace.cloud.databricks.com
+#   export DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
+#   export DATABRICKS_TOKEN=your-personal-access-token
+#   export DATABRICKS_CATALOG=your-catalog-name
+#
 # Then source it before running dbt:
 #   source .env
 #   dbt run-operation demo_load_baseline --profile demo_source
@@ -102,6 +137,7 @@ demo_source:
 #   dbt debug --profile demo_source --target dev
 #   dbt debug --profile demo_source --target motherduck
 #   dbt debug --profile demo_source --target azure
+#   dbt debug --profile demo_source --target databricks
 #
 # Expected output:
 #   Configuration:

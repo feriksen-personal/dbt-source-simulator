@@ -10,6 +10,7 @@
 # Installation:
 #   pip install soda-core-duckdb              # For DuckDB/MotherDuck
 #   pip install soda-core-sqlserver           # For Azure SQL
+#   pip install soda-core-spark[databricks]   # For Databricks
 #
 # Documentation: https://docs.soda.io/soda-core/overview-main.html
 
@@ -65,6 +66,33 @@ data_source demo_source:
 #   driver: ODBC Driver 18 for SQL Server
 #   encrypt: true
 #   trust_server_certificate: false
+
+# ============================================================================
+# Databricks - Lakehouse Data Quality
+# ============================================================================
+# Use case: Unity Catalog, Delta Lake quality validation
+# Requirements:
+#   - Databricks workspace with SQL Warehouse
+#   - Personal access token generated
+#   - Set environment variables:
+#       export DATABRICKS_SERVER_HOSTNAME=your-workspace.cloud.databricks.com
+#       export DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
+#       export DATABRICKS_TOKEN=your-personal-access-token
+#       export DATABRICKS_CATALOG=your-catalog-name
+#
+# Uncomment this section to use Databricks:
+# data_source demo_source:
+#   type: spark
+#   method: databricks
+#   host: ${DATABRICKS_SERVER_HOSTNAME}
+#   http_path: ${DATABRICKS_HTTP_PATH}
+#   token: ${DATABRICKS_TOKEN}
+#   catalog: ${DATABRICKS_CATALOG}
+#   schema: erp  # Use 'erp' for shop tables, 'crm' for CRM tables
+#
+# Note: Databricks uses different schema names than DuckDB:
+#   - DuckDB: jaffle_shop (shop) / jaffle_crm (CRM)
+#   - Databricks: erp (shop) / crm (CRM)
 
 # ============================================================================
 # Soda Cloud Integration (Optional)
