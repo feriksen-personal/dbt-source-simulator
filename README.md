@@ -6,7 +6,7 @@
 [![dbt-duckdb](https://img.shields.io/badge/dbt--duckdb-%3E%3D1.10.0-blue.svg)](https://github.com/duckdb/dbt-duckdb)
 [![dbt-sqlserver](https://img.shields.io/badge/dbt--sqlserver-%3E%3D1.10.0-blue.svg)](https://github.com/dbt-msft/dbt-sqlserver)
 
-**Manage demo source data for dbt projects** - Four simple operations: load baseline, apply deltas, reset, and check status.
+**Control plane for managing stable, versioned source system emulations** - Four simple operations: load baseline, apply deltas, reset, and check status.
 
 **[Quick Start](#quick-copy-paste-setup)** • **[Wiki Documentation](https://github.com/feriksen-personal/dbt-azure-demo-source-ops/wiki)** • **[Operations Guide](https://github.com/feriksen-personal/dbt-azure-demo-source-ops/wiki/Operations-Guide)**
 
@@ -36,7 +36,9 @@
 
 ## Why This Package?
 
-When demonstrating dbt or developing data pipelines, you need realistic source databases that you can initialize, evolve over time, and reset instantly. This package provides four simple operations to manage demo data without maintaining complex seeding scripts or manually recreating databases.
+When developing data pipelines, you need realistic source databases that you can initialize, evolve over time, and reset instantly. This package acts as a **control plane for managing stable, versioned source system emulations** across multiple platforms (DuckDB, Azure SQL, MotherDuck) without maintaining complex seeding scripts or manually recreating databases.
+
+While built with dbt operations, the managed source systems can be used by **any data pipeline tool or workflow** - Spark jobs, Pandas scripts, SQL queries, or even standalone applications that need consistent test data.
 
 **Key Benefits:**
 
