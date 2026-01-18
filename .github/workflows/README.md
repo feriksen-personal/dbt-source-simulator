@@ -1,6 +1,6 @@
 # CI/CD Workflows
 
-This directory contains GitHub Actions workflows for continuous integration and testing.
+This directory contains GitHub Actions workflows for continuous integration and testing across multiple platforms.
 
 ## Workflows
 
