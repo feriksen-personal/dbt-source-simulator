@@ -125,7 +125,7 @@ jobs:
           echo "✓ Core directory structure validated"
 
   test-duckdb:
-    name: Test DuckDB Operations
+    name: 🦆 DuckDB Integration Test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -224,7 +224,9 @@ jobs:
 
           # Create PR comment
           cat > /tmp/pr_comment.md << 'EOF'
-          ## 🧪 DuckDB Test Results
+          ## 🦆 DuckDB Integration Test Results
+
+          **Connection**: Local DuckDB database (`demo_source.duckdb`)
 
           ### ✓ Baseline Load Verification
 
@@ -246,7 +248,7 @@ jobs:
           gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment.md
 
   test-databricks:
-    name: Test Databricks Operations
+    name: 🧱 Databricks Integration Test
     runs-on: ubuntu-latest
     # Only run if Databricks secrets are available
     if: |
@@ -367,16 +369,23 @@ jobs:
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_SERVER_HOSTNAME }}
+          CI_CATALOG: ${{ steps.catalog.outputs.ci_catalog }}
         run: |
           # Create PR comment for Databricks results
-          cat > /tmp/databricks_comment.md << 'EOF'
-          ## 🧪 Databricks Test Results
+          cat > /tmp/databricks_comment.md << EOF
+          ## 🧱 Databricks Integration Test Results
+
+          **Connection**:
+          - **Host**: \`${DATABRICKS_HOST}\`
+          - **Catalog**: \`${CI_CATALOG}\`
+          - **Schemas**: \`erp\`, \`crm\`
 
           ### ✓ Baseline Load
           Successfully loaded baseline data to Databricks Unity Catalog
 
           ### Status Output
-          ```
+          \`\`\`
           EOF
 
           # Add status output if available
@@ -393,7 +402,7 @@ jobs:
           Successfully reset to baseline state
 
           ---
-          *Automated Databricks test results from CI workflow*
+          *Automated Databricks integration test from PR CI workflow*
           EOF
 
           # Post comment to PR
