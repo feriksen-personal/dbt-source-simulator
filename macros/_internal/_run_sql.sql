@@ -18,6 +18,7 @@
 
     {# Split on semicolon and execute each statement separately #}
     {% set statements = sql.split(';') %}
+    {{ log("Found " ~ statements | length ~ " statements after splitting", info=true) }}
     {% for stmt in statements %}
       {# Skip empty statements #}
       {% set stmt = stmt.strip() %}
@@ -32,6 +33,7 @@
         {% endfor %}
         {% set trimmed = ' '.join(lines).strip() %}
         {% if trimmed %}
+          {{ log("Executing statement: " ~ trimmed[:50] ~ "...", info=true) }}
           {% do run_query(trimmed) %}
         {% endif %}
       {% endif %}
