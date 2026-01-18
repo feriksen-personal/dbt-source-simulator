@@ -53,15 +53,15 @@ checks for campaigns:
 
   # Timestamp validation
   - invalid_count(start_date) = 0:
-      valid format: date
+      valid format: timestamp
   - invalid_count(end_date) = 0:
-      valid format: date
-      name: end_date is valid date when present
+      valid format: timestamp
+      name: end_date is valid timestamp when present
   - invalid_count(created_at) = 0:
-      valid format: date
+      valid format: timestamp
   - invalid_count(updated_at) = 0:
-      valid format: date
-      name: updated_at is valid date when present
+      valid format: timestamp
+      name: updated_at is valid timestamp when present
 
   # Business rule: End date should be after start date (when present)
   - failed rows:
@@ -138,10 +138,10 @@ checks for email_activity:
       valid format: timestamp
       name: clicked_at is valid timestamp when present
   - invalid_count(created_at) = 0:
-      valid format: date
+      valid format: timestamp
   - invalid_count(updated_at) = 0:
-      valid format: date
-      name: updated_at is valid date when present
+      valid format: timestamp
+      name: updated_at is valid timestamp when present
 
   # Business rules: Event sequence validation
   - failed rows:
@@ -214,10 +214,10 @@ checks for web_sessions:
       valid format: timestamp
       name: session_end is valid timestamp when present
   - invalid_count(created_at) = 0:
-      valid format: date
+      valid format: timestamp
   - invalid_count(updated_at) = 0:
-      valid format: date
-      name: updated_at is valid date when present
+      valid format: timestamp
+      name: updated_at is valid timestamp when present
 
   # Business rule: Session end should be after session start (when present)
   - failed rows:
