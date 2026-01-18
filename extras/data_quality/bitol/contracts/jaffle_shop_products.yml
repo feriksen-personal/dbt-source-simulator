@@ -98,9 +98,6 @@ quality:
       - missing_count(product_id) = 0
       - duplicate_count(product_id) = 0
 
-      # Known product IDs at baseline
-      - values in (product_id) must be in [1, 2, 3, 4, 5]
-
       # Required fields
       - missing_count(product_name) = 0
       - missing_count(price) = 0

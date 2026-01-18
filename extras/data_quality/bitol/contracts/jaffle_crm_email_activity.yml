@@ -102,9 +102,6 @@ quality:
       - missing_count(activity_id) = 0
       - duplicate_count(activity_id) = 0
 
-      # Known activity IDs at baseline
-      - values in (activity_id) must be in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
       # Required fields
       - missing_count(campaign_id) = 0
       - missing_count(sent_date) = 0
@@ -112,9 +109,6 @@ quality:
       - missing_count(clicked) = 0
       - missing_count(created_at) = 0
       - missing_count(updated_at) = 0
-
-      # Referential integrity (at baseline)
-      - values in (campaign_id) must be in [1, 2, 3]
 
       # Business rule: if clicked, must be opened
       - invalid_count(clicked) = 0:

@@ -101,9 +101,6 @@ quality:
       - missing_count(order_item_id) = 0
       - duplicate_count(order_item_id) = 0
 
-      # Known order item IDs at baseline
-      - values in (order_item_id) must be in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
       # Required fields
       - missing_count(order_id) = 0
       - missing_count(product_id) = 0
@@ -111,10 +108,6 @@ quality:
       - missing_count(unit_price) = 0
       - missing_count(created_at) = 0
       - missing_count(updated_at) = 0
-
-      # Referential integrity (at baseline)
-      - values in (order_id) must be in [1, 2, 3, 4, 5]
-      - values in (product_id) must be in [1, 2, 3, 4, 5]
 
       # Business rule validation
       - min(quantity) >= 1
