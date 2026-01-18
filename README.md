@@ -7,11 +7,7 @@
 [![dbt-databricks](https://img.shields.io/badge/dbt--databricks-%3E%3D1.10.0-blue.svg)](https://github.com/databricks/dbt-databricks)
 [![dbt-sqlserver](https://img.shields.io/badge/dbt--sqlserver-%3E%3D1.10.0-blue.svg)](https://github.com/dbt-msft/dbt-sqlserver)
 
-**Control plane for managing stable, versioned source system emulations** - Four simple operations: load baseline, apply deltas, reset, and check status.
-
-**Simulates upstream source systems with deterministic, incremental data** — giving your ingestion pipelines stable, versioned databases to pull from. Test Lakeflow Connect, Fivetran, CDC patterns, or custom ingestion against controlled source evolution.
-
-# dbt-origin-simulator-ops
+**Control plane for deterministic, incremental source system simulation** — four operations to manage upstream databases your ingestion pipelines pull from. Test Lakeflow Connect, Fivetran, CDC patterns, or custom ingestion against controlled source evolution.
 
 **[Quick Start](#quick-start)** • **[Wiki](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)** • **[Operations Guide](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
 
