@@ -21,7 +21,7 @@
 # ============================================================================
 # Customer master data with email tracking and soft deletes
 
-checks for customers:
+checks for jaffle_shop.customers:
   # Schema validation - Primary key
   - schema:
       fail:
@@ -61,7 +61,7 @@ checks for customers:
 # ============================================================================
 # Product catalog with pricing
 
-checks for products:
+checks for jaffle_shop.products:
   # Schema validation
   - schema:
       fail:
@@ -101,7 +101,7 @@ checks for products:
 # ============================================================================
 # Customer orders with status tracking
 
-checks for orders:
+checks for jaffle_shop.orders:
   # Schema validation
   - schema:
       fail:
@@ -148,7 +148,7 @@ checks for orders:
 # ============================================================================
 # Line items for orders with quantities and pricing
 
-checks for order_items:
+checks for jaffle_shop.order_items:
   # Schema validation
   - schema:
       fail:
@@ -205,7 +205,7 @@ checks for order_items:
 # ============================================================================
 # Payment records for orders
 
-checks for payments:
+checks for jaffle_shop.payments:
   # Schema validation
   - schema:
       fail:

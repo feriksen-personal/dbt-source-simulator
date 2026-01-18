@@ -21,7 +21,7 @@
 # ============================================================================
 # Marketing campaign master data
 
-checks for campaigns:
+checks for jaffle_crm.campaigns:
   # Schema validation
   - schema:
       fail:
@@ -64,7 +64,7 @@ checks for campaigns:
 # ============================================================================
 # Email engagement tracking (sent, opened, clicked)
 
-checks for email_activity:
+checks for jaffle_crm.email_activity:
   # Schema validation
   - schema:
       fail:
@@ -140,7 +140,7 @@ checks for email_activity:
 # ============================================================================
 # Website visitor session tracking
 
-checks for web_sessions:
+checks for jaffle_crm.web_sessions:
   # Schema validation
   - schema:
       fail:
