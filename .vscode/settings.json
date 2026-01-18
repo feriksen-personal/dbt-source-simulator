@@ -1,0 +1,19 @@
+{
+  "sqltools.connections": [
+    {
+      "name": "DuckDB (Local)",
+      "driver": "DuckDB",
+      "database": "/tmp/demo_source_test.duckdb",
+      "previewLimit": 50
+    },
+    {
+      "name": "MotherDuck (Cloud)",
+      "driver": "DuckDB",
+      "database": "md:",
+      "duckDbOptions": {
+        "motherduck_token": "${env:MOTHERDUCK_TOKEN}"
+      },
+      "previewLimit": 50
+    }
+  ]
+}

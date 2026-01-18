@@ -7,8 +7,9 @@ Complete documentation for managing demo source data in dbt projects.
 ## Quick Navigation
 
 ### Getting Started
-- [Installation & Setup](Getting-Started) - First-time setup for DuckDB and Azure SQL
+- [Installation & Setup](Getting-Started) - First-time setup for DuckDB, MotherDuck, and Azure SQL
 - [Operations Guide](Operations-Guide) - How to use all 4 operations
+- [Use Cases & Platforms](Use-Cases-and-Platforms) - Platform comparison and when to use each
 
 ### Core Documentation
 - [Data Schemas](Data-Schemas) - Tables, columns, ID ranges, and relationships
@@ -34,8 +35,9 @@ Complete documentation for managing demo source data in dbt projects.
 - `demo_reset` - Truncate and reload baseline
 - `demo_status` - Show current row counts
 
-### Supported Adapters
-- **DuckDB** - Local development (zero cloud costs)
+### Supported Platforms
+- **DuckDB (Local)** - Local development (zero cloud costs)
+- **MotherDuck** - Cloud collaboration with shared databases (free tier available)
 - **Azure SQL** - Cloud demos with CDC/change tracking
 
 ---

@@ -17,7 +17,9 @@
         "anthropic.claude-code",
         "redhat.vscode-yaml",
         "yzhang.markdown-all-in-one",
-        "davidanson.vscode-markdownlint"
+        "davidanson.vscode-markdownlint",
+        "mtxr.sqltools",
+        "evidence-dev.sqltools-duckdb-driver"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
