@@ -703,4 +703,4 @@ Tables that only insert (no updates):
 
 ---
 
-**Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-origin-simulator-ops/issues)
+**Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-source-simulator/issues)

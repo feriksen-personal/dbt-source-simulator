@@ -41,25 +41,25 @@
 #}
 
 {% macro origin_reset() %}
-  {% set cfg = origin_simulator_ops._get_config() %}
+  {% set cfg = dbt_source_simulator._get_config() %}
 
-  {{ origin_simulator_ops._log("") }}
-  {{ origin_simulator_ops._log("Resetting demo databases to baseline...") }}
+  {{ dbt_source_simulator._log("") }}
+  {{ dbt_source_simulator._log("Resetting demo databases to baseline...") }}
 
   {# Truncate jaffle_shop tables #}
-  {{ origin_simulator_ops._log("→ Truncating jaffle_shop tables...") }}
-  {% set truncate_shop_sql = origin_simulator_ops._get_sql('utilities/truncate_shop') %}
-  {% do origin_simulator_ops._run_sql(truncate_shop_sql) %}
-  {{ origin_simulator_ops._log("  ✓ Truncated jaffle_shop tables") }}
+  {{ dbt_source_simulator._log("→ Truncating jaffle_shop tables...") }}
+  {% set truncate_shop_sql = dbt_source_simulator._get_sql('utilities/truncate_shop') %}
+  {% do dbt_source_simulator._run_sql(truncate_shop_sql) %}
+  {{ dbt_source_simulator._log("  ✓ Truncated jaffle_shop tables") }}
 
   {# Truncate jaffle_crm tables #}
-  {{ origin_simulator_ops._log("→ Truncating jaffle_crm tables...") }}
-  {% set truncate_crm_sql = origin_simulator_ops._get_sql('utilities/truncate_crm') %}
-  {% do origin_simulator_ops._run_sql(truncate_crm_sql) %}
-  {{ origin_simulator_ops._log("  ✓ Truncated jaffle_crm tables") }}
+  {{ dbt_source_simulator._log("→ Truncating jaffle_crm tables...") }}
+  {% set truncate_crm_sql = dbt_source_simulator._get_sql('utilities/truncate_crm') %}
+  {% do dbt_source_simulator._run_sql(truncate_crm_sql) %}
+  {{ dbt_source_simulator._log("  ✓ Truncated jaffle_crm tables") }}
 
-  {{ origin_simulator_ops._log("") }}
+  {{ dbt_source_simulator._log("") }}
 
   {# Reload baseline data #}
-  {{ origin_simulator_ops.origin_load_baseline() }}
+  {{ dbt_source_simulator.origin_load_baseline() }}
 {% endmacro %}

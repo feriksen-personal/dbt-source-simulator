@@ -205,4 +205,4 @@ Because this package provides **deterministic data evolution**, you can:
 - **Test contract evolution** - Validate how contracts change across deltas
 - **Demonstrate contract-driven development** - Show how contracts guide development
 
-See the [Operations Guide](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide#understanding-deterministic-evolution) for complete details on expected state at each delta phase.
+See the [Operations Guide](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Operations-Guide#understanding-deterministic-evolution) for complete details on expected state at each delta phase.

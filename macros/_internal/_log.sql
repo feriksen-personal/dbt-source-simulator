@@ -8,8 +8,8 @@
     msg (str): Message to log
 
   Example usage:
-    {{ origin_simulator_ops._log("Loading baseline data...") }}
-    {{ origin_simulator_ops._log("✓ Baseline loaded successfully") }}
+    {{ dbt_source_simulator._log("Loading baseline data...") }}
+    {{ dbt_source_simulator._log("✓ Baseline loaded successfully") }}
 #}
 
 {% macro _log(msg) %}

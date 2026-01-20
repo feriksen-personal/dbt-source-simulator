@@ -20,7 +20,7 @@ Get from zero to working source systems in minutes.
 
 ```yaml
 packages:
-  - git: "https://github.com/feriksen-personal/dbt-origin-simulator-ops"
+  - git: "https://github.com/feriksen-personal/dbt-source-simulator"
     revision: v1.0.0
 ```
 

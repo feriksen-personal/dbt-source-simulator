@@ -10,7 +10,7 @@ Override in your `dbt_project.yml`:
 
 ```yaml
 vars:
-  origin_simulator_ops:
+  dbt_source_simulator:
     shop_db: 'jaffle_shop'    # Default database/schema name for ERP data
     crm_db: 'jaffle_crm'      # Default database/schema name for CRM data
 ```

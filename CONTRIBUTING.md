@@ -1,4 +1,4 @@
-# Contributing to dbt-origin-simulator-ops
+# Contributing to dbt-source-simulator
 
 Thank you for your interest in contributing! This package allows you to demonstrate production-grade data engineering patterns with deterministic, reproducible demo data across multiple platforms.
 
@@ -46,8 +46,8 @@ If you prefer to set up your local environment:
 
 ```bash
 # Clone the repository
-git clone https://github.com/feriksen-personal/dbt-origin-simulator-ops.git
-cd dbt-origin-simulator-ops
+git clone https://github.com/feriksen-personal/dbt-source-simulator.git
+cd dbt-source-simulator
 
 # Install dbt adapters (choose what you need)
 pip install dbt-duckdb>=1.10.0        # For DuckDB/MotherDuck
@@ -95,7 +95,7 @@ git checkout -b feature/your-feature-name
 The package is organized as follows:
 
 ```
-dbt-origin-simulator-ops/
+dbt-source-simulator/
 ├── macros/
 │   ├── _internal/        # SQL macros, routing logic
 │   └── *.sql             # Public operation macros
@@ -280,10 +280,10 @@ View CI results in the GitHub Actions tab.
 
 ## Need Help?
 
-- 💬 **Questions?** [Open a Discussion](https://github.com/feriksen-personal/dbt-origin-simulator-ops/discussions)
-- 🐛 **Found a bug?** [Open an Issue](https://github.com/feriksen-personal/dbt-origin-simulator-ops/issues)
-- 📖 **Read the docs:** [Wiki](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)
-- 🎓 **Getting Started:** [Setup Guide](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Getting-Started)
+- 💬 **Questions?** [Open a Discussion](https://github.com/feriksen-personal/dbt-source-simulator/discussions)
+- 🐛 **Found a bug?** [Open an Issue](https://github.com/feriksen-personal/dbt-source-simulator/issues)
+- 📖 **Read the docs:** [Wiki](https://github.com/feriksen-personal/dbt-source-simulator/wiki)
+- 🎓 **Getting Started:** [Setup Guide](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Getting-Started)
 
 ---
 

@@ -4,7 +4,7 @@ sources:
   - name: jaffle_shop
     description: >
       E-commerce and order management system with transactional data.
-      Managed by dbt-origin-simulator-ops package.
+      Managed by dbt-source-simulator package.
     database: jaffle_shop
     schema: erp  # Schema name for jaffle_shop tables
 
@@ -227,7 +227,7 @@ sources:
   - name: jaffle_crm
     description: >
       Marketing and CRM system with campaign and engagement tracking data.
-      Managed by dbt-origin-simulator-ops package.
+      Managed by dbt-source-simulator package.
     database: jaffle_crm
     schema: crm  # Schema name for jaffle_crm tables
 

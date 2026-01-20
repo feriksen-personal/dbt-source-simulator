@@ -1,5 +1,5 @@
 {
-  "name": "dbt-origin-simulator-ops",
+  "name": "dbt-source-simulator",
   "image": "python:3.11-slim",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},

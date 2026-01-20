@@ -680,4 +680,4 @@ dbt run-operation origin_reset --profile ingestion_simulator
 
 ---
 
-**Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-origin-simulator-ops/issues)
+**Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-source-simulator/issues)

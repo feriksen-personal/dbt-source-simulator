@@ -1,4 +1,4 @@
-name: 'origin_simulator_ops'
+name: 'dbt_source_simulator'
 version: '1.0.0'
 config-version: 2
 
@@ -8,7 +8,7 @@ profile: 'ingestion_simulator'
 
 # Default database names - can be overridden in consuming project
 vars:
-  origin_simulator_ops:
+  dbt_source_simulator:
     shop_db: 'jaffle_shop'
     crm_db: 'jaffle_crm'
 

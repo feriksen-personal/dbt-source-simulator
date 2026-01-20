@@ -1,6 +1,6 @@
-# dbt-origin-simulator-ops
+# dbt-source-simulator
 
-[![CI](https://github.com/feriksen-personal/dbt-origin-simulator-ops/actions/workflows/test-package.yml/badge.svg)](https://github.com/feriksen-personal/dbt-origin-simulator-ops/actions/workflows/test-package.yml)
+[![CI](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml/badge.svg)](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![dbt Core](https://img.shields.io/badge/dbt_Core-%3E%3D1.10.0-orange.svg)](https://docs.getdbt.com/docs/introduction)
 [![dbt-duckdb](https://img.shields.io/badge/dbt--duckdb-%3E%3D1.10.0-blue.svg)](https://github.com/duckdb/dbt-duckdb)
@@ -9,7 +9,7 @@
 
 **Control plane for deterministic, incremental source system simulation** — four operations to manage upstream databases your ingestion pipelines pull from. Test Lakeflow Connect, Fivetran, CDC patterns, or custom ingestion against controlled source incremental changes.
 
-**[Quick Start](#quick-start)** • **[Wiki](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)** • **[Operations Guide](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
+**[Quick Start](#quick-start)** • **[Wiki](https://github.com/feriksen-personal/dbt-source-simulator/wiki)** • **[Operations Guide](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Operations-Guide)**
 
 ---
 
@@ -18,7 +18,7 @@
 ```yaml
 # packages.yml
 packages:
-  - git: "https://github.com/feriksen-personal/dbt-origin-simulator-ops"
+  - git: "https://github.com/feriksen-personal/dbt-source-simulator"
     revision: v1.0.0
 ```
 
@@ -66,7 +66,7 @@ Your dbt project, Lakeflow Connect, Fivetran, or Spark jobs consume these as ext
 | `origin_reset` | Reset sources to baseline state | `dbt run-operation origin_reset --profile ingestion_simulator` |
 | `origin_status` | Inspect current source state | `dbt run-operation origin_status --profile ingestion_simulator` |
 
-📚 **[Detailed Operations Guide →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Operations-Guide)**
+📚 **[Detailed Operations Guide →](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Operations-Guide)**
 
 ---
 
@@ -106,7 +106,7 @@ The `extras/` folder provides production-ready templates:
 - `tasks.json` — VS Code Command Palette actions for all operations
 - `github-actions.yml` — CI/CD workflow with baseline, incremental, and matrix testing jobs
 
-📁 **[Extras documentation →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/tree/main/extras)** • **[Wiki →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)**
+📁 **[Extras documentation →](https://github.com/feriksen-personal/dbt-source-simulator/tree/main/extras)** • **[Wiki →](https://github.com/feriksen-personal/dbt-source-simulator/wiki)**
 
 ---
 
@@ -137,7 +137,7 @@ The `extras/` folder provides production-ready templates:
 
 All tables include `created_at`, `updated_at` for CDC detection.
 
-📊 **[Schema documentation with delta patterns →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas)**
+📊 **[Schema documentation with delta patterns →](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Data-Schemas)**
 
 ---
 
@@ -146,19 +146,19 @@ All tables include `created_at`, `updated_at` for CDC detection.
 ```yaml
 # dbt_project.yml (optional)
 vars:
-  origin_simulator_ops:
+  dbt_source_simulator:
     shop_db: 'jaffle_shop'  # default
     crm_db: 'jaffle_crm'    # default
 ```
 
-Profile examples for each platform: **[Setup Guide →](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Getting-Started)**
+Profile examples for each platform: **[Setup Guide →](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Getting-Started)**
 
 ---
 
 ## Project Structure
 
 ```
-dbt-origin-simulator-ops/
+dbt-source-simulator/
 ├── macros/                     # Four operations
 ├── data/
 │   ├── duckdb/                 # DuckDB/MotherDuck source definitions
@@ -187,4 +187,4 @@ MIT — see [LICENSE](LICENSE).
 
 ---
 
-**Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-origin-simulator-ops/issues) | **Detailed docs:** [Project wiki](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)
+**Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-source-simulator/issues) | **Detailed docs:** [Project wiki](https://github.com/feriksen-personal/dbt-source-simulator/wiki)

@@ -1,4 +1,4 @@
-# Soda Core Configuration for dbt-origin-simulator-ops
+# Soda Core Configuration for dbt-source-simulator
 #
 # This file configures data sources for Soda Core data quality checks.
 # Copy and customize for your environment.
@@ -139,4 +139,4 @@ data_source ingestion_simulator:
 # Issue: "ODBC Driver 18 not found" (Azure SQL)
 # Solution: Install driver from https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
 #
-# For more help: https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Troubleshooting
+# For more help: https://github.com/feriksen-personal/dbt-source-simulator/wiki/Troubleshooting

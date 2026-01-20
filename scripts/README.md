@@ -1,6 +1,6 @@
 # Scripts
 
-Automation scripts for the dbt-origin-simulator-ops package.
+Automation scripts for the dbt-source-simulator package.
 
 ---
 
@@ -79,11 +79,11 @@ Automates the complete ERD generation and wiki update process.
 
 ### Viewing ERDs
 
-ERDs are automatically embedded in the [Data Schemas wiki page](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Data-Schemas).
+ERDs are automatically embedded in the [Data Schemas wiki page](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Data-Schemas).
 
 **Direct image URLs:**
-- [jaffle_shop ERD](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/images/jaffle-shop-erd.svg)
-- [jaffle_crm ERD](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/images/jaffle-crm-erd.svg)
+- [jaffle_shop ERD](https://github.com/feriksen-personal/dbt-source-simulator/wiki/images/jaffle-shop-erd.svg)
+- [jaffle_crm ERD](https://github.com/feriksen-personal/dbt-source-simulator/wiki/images/jaffle-crm-erd.svg)
 
 ### Local Development
 
@@ -211,4 +211,4 @@ This would generate a "dbt Models ERD" showing relationships in the transformed 
 
 ---
 
-**Related:** [Issue #45](https://github.com/feriksen-personal/dbt-origin-simulator-ops/issues/45) - ERD Automation
+**Related:** [Issue #45](https://github.com/feriksen-personal/dbt-source-simulator/issues/45) - ERD Automation

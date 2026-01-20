@@ -17,8 +17,8 @@ info:
     - Updates to budget, dates possible
   owner: Demo Team
   contact:
-    name: dbt-origin-simulator-ops
-    url: https://github.com/feriksen-personal/dbt-origin-simulator-ops
+    name: dbt-source-simulator
+    url: https://github.com/feriksen-personal/dbt-source-simulator
 
 servers:
   duckdb:

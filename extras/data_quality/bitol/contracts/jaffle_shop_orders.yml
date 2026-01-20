@@ -13,8 +13,8 @@ info:
     Day 3 delta: +65 orders (IDs 616-680)
   owner: Demo Team
   contact:
-    name: dbt-origin-simulator-ops
-    url: https://github.com/feriksen-personal/dbt-origin-simulator-ops
+    name: dbt-source-simulator
+    url: https://github.com/feriksen-personal/dbt-source-simulator
 
 servers:
   duckdb:

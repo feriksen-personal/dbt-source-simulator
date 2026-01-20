@@ -21,24 +21,24 @@
 #}
 
 {% macro origin_status() %}
-  {% set cfg = origin_simulator_ops._get_config() %}
+  {% set cfg = dbt_source_simulator._get_config() %}
 
   {# Query row counts from all tables #}
   {% set shop_counts = _get_shop_counts(cfg.shop_db) %}
   {% set crm_counts = _get_crm_counts(cfg.crm_db) %}
 
   {# Format and display output #}
-  {{ origin_simulator_ops._log("") }}
-  {{ origin_simulator_ops._log("═══ Demo Source Status ═══") }}
-  {{ origin_simulator_ops._log("jaffle_shop:") }}
-  {{ origin_simulator_ops._log("  customers: " ~ shop_counts.customers ~ " | products: " ~ shop_counts.products ~ " | orders: " ~ shop_counts.orders) }}
-  {{ origin_simulator_ops._log("  order_items: " ~ shop_counts.order_items) }}
-  {{ origin_simulator_ops._log("") }}
-  {{ origin_simulator_ops._log("jaffle_crm:") }}
-  {{ origin_simulator_ops._log("  campaigns: " ~ crm_counts.campaigns ~ " | email_activity: " ~ crm_counts.email_activity) }}
-  {{ origin_simulator_ops._log("  web_sessions: " ~ crm_counts.web_sessions) }}
-  {{ origin_simulator_ops._log("══════════════════════════") }}
-  {{ origin_simulator_ops._log("") }}
+  {{ dbt_source_simulator._log("") }}
+  {{ dbt_source_simulator._log("═══ Demo Source Status ═══") }}
+  {{ dbt_source_simulator._log("jaffle_shop:") }}
+  {{ dbt_source_simulator._log("  customers: " ~ shop_counts.customers ~ " | products: " ~ shop_counts.products ~ " | orders: " ~ shop_counts.orders) }}
+  {{ dbt_source_simulator._log("  order_items: " ~ shop_counts.order_items) }}
+  {{ dbt_source_simulator._log("") }}
+  {{ dbt_source_simulator._log("jaffle_crm:") }}
+  {{ dbt_source_simulator._log("  campaigns: " ~ crm_counts.campaigns ~ " | email_activity: " ~ crm_counts.email_activity) }}
+  {{ dbt_source_simulator._log("  web_sessions: " ~ crm_counts.web_sessions) }}
+  {{ dbt_source_simulator._log("══════════════════════════") }}
+  {{ dbt_source_simulator._log("") }}
 {% endmacro %}
 
 

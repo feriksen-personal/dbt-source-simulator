@@ -28,7 +28,7 @@
 #}
 
 {% macro _verify_test_results(expected_counts) %}
-  {% set cfg = origin_simulator_ops._get_config() %}
+  {% set cfg = dbt_source_simulator._get_config() %}
   {% set all_passed = true %}
   {% set results = [] %}
 
@@ -60,28 +60,28 @@
   {% endfor %}
 
   {# Output formatted table #}
-  {{ origin_simulator_ops._log("") }}
-  {{ origin_simulator_ops._log("╔════════════════════════════════════════════════════════╗") }}
-  {{ origin_simulator_ops._log("║ Test Results                                           ║") }}
-  {{ origin_simulator_ops._log("╠════════════════════════════════════════════════════════╣") }}
-  {{ origin_simulator_ops._log("║ Database.Table          │ Expected │ Actual │ Status   ║") }}
-  {{ origin_simulator_ops._log("╟────────────────────────────────────────────────────────╢") }}
+  {{ dbt_source_simulator._log("") }}
+  {{ dbt_source_simulator._log("╔════════════════════════════════════════════════════════╗") }}
+  {{ dbt_source_simulator._log("║ Test Results                                           ║") }}
+  {{ dbt_source_simulator._log("╠════════════════════════════════════════════════════════╣") }}
+  {{ dbt_source_simulator._log("║ Database.Table          │ Expected │ Actual │ Status   ║") }}
+  {{ dbt_source_simulator._log("╟────────────────────────────────────────────────────────╢") }}
 
   {% for result in results %}
     {% set status = "✅" if result.passed else "❌" %}
     {% set table_padded = (result.table ~ "                       ")[:23] %}
     {% set expected_padded = ("%8d" % result.expected) %}
     {% set actual_padded = ("%6d" % result.actual) %}
-    {{ origin_simulator_ops._log("║ " ~ table_padded ~ " │ " ~ expected_padded ~ " │ " ~ actual_padded ~ " │ " ~ status ~ "      ║") }}
+    {{ dbt_source_simulator._log("║ " ~ table_padded ~ " │ " ~ expected_padded ~ " │ " ~ actual_padded ~ " │ " ~ status ~ "      ║") }}
   {% endfor %}
 
-  {{ origin_simulator_ops._log("╚════════════════════════════════════════════════════════╝") }}
-  {{ origin_simulator_ops._log("") }}
+  {{ dbt_source_simulator._log("╚════════════════════════════════════════════════════════╝") }}
+  {{ dbt_source_simulator._log("") }}
 
   {% if all_passed %}
-    {{ origin_simulator_ops._log("✓ All tests passed") }}
+    {{ dbt_source_simulator._log("✓ All tests passed") }}
   {% else %}
-    {{ origin_simulator_ops._log("✗ Some tests failed") }}
+    {{ dbt_source_simulator._log("✗ Some tests failed") }}
     {{ exceptions.raise_compiler_error("Test verification failed - row counts do not match expected values") }}
   {% endif %}
 

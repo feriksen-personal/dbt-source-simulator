@@ -1,4 +1,4 @@
-# dbt-origin-simulator-ops
+# dbt-source-simulator
 
 **Control plane for deterministic, incremental source system simulation** — four operations to manage upstream databases your ingestion pipelines pull from.
 
@@ -36,7 +36,7 @@ Your dbt project, Lakeflow Connect, Fivetran, or Spark jobs consume these as ext
 ```yaml
 # packages.yml
 packages:
-  - git: "https://github.com/feriksen-personal/dbt-origin-simulator-ops"
+  - git: "https://github.com/feriksen-personal/dbt-source-simulator"
     revision: v1.0.0
 ```
 
@@ -94,6 +94,6 @@ dbt run-operation origin_status --profile ingestion_simulator
 
 ## Links
 
-- **Repository:** [github.com/feriksen-personal/dbt-origin-simulator-ops](https://github.com/feriksen-personal/dbt-origin-simulator-ops)
-- **Issues:** [Report bugs or request features](https://github.com/feriksen-personal/dbt-origin-simulator-ops/issues)
-- **Contributing:** [CONTRIBUTING.md](https://github.com/feriksen-personal/dbt-origin-simulator-ops/blob/main/CONTRIBUTING.md)
+- **Repository:** [github.com/feriksen-personal/dbt-source-simulator](https://github.com/feriksen-personal/dbt-source-simulator)
+- **Issues:** [Report bugs or request features](https://github.com/feriksen-personal/dbt-source-simulator/issues)
+- **Contributing:** [CONTRIBUTING.md](https://github.com/feriksen-personal/dbt-source-simulator/blob/main/CONTRIBUTING.md)

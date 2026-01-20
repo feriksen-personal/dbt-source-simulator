@@ -282,7 +282,7 @@ If you override the default database names:
 ```yaml
 # In your dbt_project.yml
 vars:
-  origin_simulator_ops:
+  dbt_source_simulator:
     shop_db: 'my_shop'
     crm_db: 'my_crm'
 
@@ -310,6 +310,6 @@ make baseline TARGET=motherduck
 
 ## Need Help?
 
-- **Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-origin-simulator-ops/issues)
-- **Wiki**: [Full documentation](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki)
-- **Getting Started**: [Setup guide](https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki/Getting-Started)
+- **Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-source-simulator/issues)
+- **Wiki**: [Full documentation](https://github.com/feriksen-personal/dbt-source-simulator/wiki)
+- **Getting Started**: [Setup guide](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Getting-Started)

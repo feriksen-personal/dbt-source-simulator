@@ -11,7 +11,7 @@
 #
 # Copy to: .github/workflows/test-with-demo-sources.yml
 #
-# Documentation: https://github.com/feriksen-personal/dbt-origin-simulator-ops/wiki
+# Documentation: https://github.com/feriksen-personal/dbt-source-simulator/wiki
 
 name: Test with Demo Sources
 
