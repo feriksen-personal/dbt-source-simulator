@@ -210,6 +210,10 @@ __marimo__/
 dbt_packages/
 logs/
 
+# DuckDB database files
+*.duckdb
+*.duckdb.wal
+
 # Claude AI assistant files (local only)
 .claude/
 
