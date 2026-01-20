@@ -1,4 +1,6 @@
-# dbt-source-simulator
+<p align="center">
+  <img src="docs/images/dbt-source-simulator-banner-light.png" alt="dbt-source-simulator" width="480">
+</p>
 
 [![CI](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml/badge.svg)](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
