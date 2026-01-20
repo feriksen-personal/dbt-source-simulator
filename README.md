@@ -1,6 +1,8 @@
 <p align="center">
-  <img src="docs/images/dbt-source-simulator-banner-light.png" alt="dbt-source-simulator" width="480">
+  <img src="docs/assets/dbt-source-simulator-banner-light.svg" alt="dbt-source-simulator" width="480">
 </p>
+
+> *The source system you can actually control. Deterministic data evolution for pipelines that need to be tested, not trusted.*
 
 [![CI](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml/badge.svg)](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)

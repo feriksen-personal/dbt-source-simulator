@@ -1,0 +1,37 @@
+<svg width="480" height="120" viewBox="0 0 480 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="480" height="120" fill="#ffffff"/>
+
+  <defs>
+    <linearGradient id="bg-simulator" x1="0%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e6e4a"/>
+      <stop offset="100%" style="stop-color:#145035"/>
+    </linearGradient>
+    <linearGradient id="header-simulator" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4eca8b"/>
+      <stop offset="100%" style="stop-color:#27ae60"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon (56x63) at x=40, vertically centered -->
+  <g transform="translate(40, 28)">
+    <rect x="0" y="0" width="56" height="63" rx="12" fill="url(#bg-simulator)"/>
+    <rect x="0" y="0" width="56" height="63" rx="12" fill="none" stroke="#4eca8b" stroke-width="2"/>
+    <rect x="6" y="6" width="44" height="16" rx="6" fill="url(#header-simulator)"/>
+    <circle cx="14" cy="14" r="3.5" fill="rgba(255,255,255,0.85)"/>
+    <rect x="8" y="28" width="26" height="2" rx="1" fill="#4eca8b" opacity="0.4"/>
+    <rect x="8" y="34" width="40" height="2" rx="1" fill="#4eca8b" opacity="0.4"/>
+  </g>
+
+  <!-- Timeline overlaid at bottom of icon, wider than icon -->
+  <g transform="translate(25, 72)">
+    <line x1="0" y1="0" x2="86" y2="0" stroke="#27ae60" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="12" cy="0" r="6" fill="#27ae60"/>
+    <circle cx="43" cy="0" r="6" fill="#27ae60"/>
+    <circle cx="74" cy="0" r="9" fill="#27ae60"/>
+    <circle cx="74" cy="0" r="4.5" fill="#fff"/>
+  </g>
+
+  <!-- Text at x=140 (aligned with dbt-conceptual) -->
+  <text x="140" y="52" fill="#1e6e4a" font-family="JetBrains Mono, monospace" font-size="24" font-weight="500">dbt-source-simulator</text>
+  <text x="140" y="78" fill="#27ae60" font-family="JetBrains Mono, monospace" font-size="14">Source simulation for data engineering</text>
+</svg>
