@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="docs/assets/dbt-source-simulator-banner-light.svg" alt="dbt-source-simulator" width="480">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/github-banner-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/github-banner-light.svg">
+    <img src="docs/assets/github-banner-light.svg" alt="dbt-source-simulator" width="600">
+  </picture>
 </p>
 
 > *The source system you can actually control. Deterministic data evolution for pipelines that need to be tested, not trusted.*

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fafaf9"/>
+      <stop offset="100%" style="stop-color:#f5f4f2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Logo mark (large) -->
+  <g transform="translate(440, 140)">
+    <g transform="scale(2)">
+      <path d="M7.8 20.8 C7.8 10.4 15.6 7.8 26 20.8 C15.6 33.8 7.8 31.2 7.8 20.8" stroke="#27ae60" stroke-width="3.9" fill="none" stroke-linecap="round"/>
+      <path d="M26 20.8 C36.4 33.8 44.2 31.2 44.2 20.8 C44.2 10.4 36.4 7.8 26 20.8" stroke="#888888" stroke-width="3.9" fill="none" stroke-linecap="round"/>
+      <path d="M7.8 37.7 L36 37.7" stroke="#27ae60" stroke-width="3.25" stroke-linecap="round"/>
+      <circle cx="44" cy="37.7" r="7" stroke="#27ae60" stroke-width="1.5" fill="none"/>
+      <path d="M44 33 L44 37.7 L47 39" stroke="#27ae60" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="44" cy="37.7" r="1.5" fill="#27ae60"/>
+    </g>
+  </g>
+  
+  <!-- Wordmark -->
+  <text x="600" y="380" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="56" font-weight="600" letter-spacing="-0.02em">
+    <tspan fill="#888888">dbt</tspan><tspan fill="#cccccc">-</tspan><tspan fill="#27ae60">source-simulator</tspan>
+  </text>
+  
+  <!-- Tagline -->
+  <text x="600" y="450" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="24" fill="#999999">
+    Deterministic, incremental source system simulation
+  </text>
+  
+  <!-- URL -->
+  <text x="600" y="560" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="18" fill="#bbbbbb">
+    github.com/dbt-source-simulator
+  </text>
+</svg>
