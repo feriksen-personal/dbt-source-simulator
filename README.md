@@ -6,22 +6,32 @@
   </picture>
 </p>
 
-> *The source system you can actually control. Deterministic data evolution for pipelines that need to be tested, not trusted.*
+<p align="center">
+  <em>Fake source systems so you can focus on the interesting stuff.</em>
+</p>
 
-[![CI](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml/badge.svg)](https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![dbt Core](https://img.shields.io/badge/dbt_Core-%3E%3D1.10.0-orange.svg)](https://docs.getdbt.com/docs/introduction)
-[![dbt-duckdb](https://img.shields.io/badge/dbt--duckdb-%3E%3D1.10.0-blue.svg)](https://github.com/duckdb/dbt-duckdb)
-[![dbt-databricks](https://img.shields.io/badge/dbt--databricks-%3E%3D1.10.0-blue.svg)](https://github.com/databricks/dbt-databricks)
-[![dbt-sqlserver](https://img.shields.io/badge/dbt--sqlserver-%3E%3D1.10.0-blue.svg)](https://github.com/dbt-msft/dbt-sqlserver)
+<p align="center">
+  <a href="https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml"><img src="https://github.com/feriksen-personal/dbt-source-simulator/actions/workflows/test-package.yml/badge.svg" alt="CI"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
+  <a href="https://docs.getdbt.com/docs/introduction"><img src="https://img.shields.io/badge/dbt_Core-%3E%3D1.10.0-orange.svg" alt="dbt Core"></a>
+</p>
 
-> **Deterministic source data, on demand.**
+---
 
-*Deterministic source evolution for testing CDC, SCD2, and incremental loads without the guesswork.*
+## What is this?
 
-**Control plane for deterministic, incremental source system simulation** — four operations to manage upstream databases your ingestion pipelines pull from. Test Lakeflow Connect, Fivetran, CDC patterns, or custom ingestion against controlled source incremental changes.
+Pre-built source databases (ERP + CRM) with predictable data that evolves over time. Four commands. Done.
 
-**[Quick Start](#quick-start)** • **[Wiki](https://github.com/feriksen-personal/dbt-source-simulator/wiki)** • **[Operations Guide](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Operations-Guide)**
+**Use it when you want to:**
+- Test CDC, change tracking, or ingestion patterns
+- Demo Lakeflow Connect, Fivetran, or custom pipelines  
+- Validate SCD2 or incremental load logic
+- Run a workshop where everyone needs identical source data
+- Explore something new without building plumbing first
+
+**Skip it when:**
+- You need production-like scale or complexity
+- Your actual source systems are available for testing
 
 ---
 
@@ -36,155 +46,91 @@ packages:
 
 ```bash
 dbt deps
-dbt run-operation origin_load_baseline --profile ingestion_simulator
-dbt run-operation origin_apply_delta --args '{day: 1}' --profile ingestion_simulator
-dbt run-operation origin_status --profile ingestion_simulator
+dbt run-operation origin_load_baseline    # Day 0: initial data
+dbt run-operation origin_apply_delta --args '{day: 1}'   # Day 1: inserts, updates, deletes
+dbt run-operation origin_apply_delta --args '{day: 2}'   # Day 2: more changes
+dbt run-operation origin_status           # What state am I in?
+dbt run-operation origin_reset            # Back to Day 0
 ```
 
-> ⚠️ Always use `--profile` to target your source database connection — never run against your default (target) profile. The VS Code tasks in `extras/` handle this automatically.
+> Use `--profile ingestion_simulator` to target your source database, not your warehouse.
 
 ---
 
-## What This Creates
+## What You Get
 
-This package creates and manages **source databases** — the upstream systems your pipelines ingest *from*, not the destination.
+Two fake source systems inspired by [Jaffle Shop](https://github.com/dbt-labs/jaffle_shop):
 
-Two simulated systems (inspired by dbt Labs' [Jaffle Shop](https://github.com/dbt-labs/jaffle_shop)):
-- **jaffle_shop** — ERP/e-commerce: customers, products, orders, order_items, payments
-- **jaffle_crm** — Marketing platform: campaigns, email_activity, web_sessions
+| System | Tables | What changes |
+|--------|--------|--------------|
+| **jaffle_shop** (ERP) | customers, products, orders, order_items, payments | Email updates, status transitions, soft deletes, new orders |
+| **jaffle_crm** (Marketing) | campaigns, email_activity, web_sessions | New events, campaign updates |
 
-Your dbt project, Lakeflow Connect, Fivetran, or Spark jobs consume these as external sources.
+Each table has `created_at` and `updated_at` for CDC detection.
 
----
+**Day 0** → Baseline data  
+**Day 1** → Some inserts, updates, soft deletes  
+**Day 2** → More of the same  
+**Day 3** → You get the idea
 
-## Core Concepts
-
-**Source-side simulation** — This package manages the databases your pipelines ingest *from*, not your target warehouse. Think of it as a controllable stand-in for production ERP, CRM, and marketing systems.
-
-**Deterministic** — Same data every run. Customer #6 always appears in Day 1. Order #12 always gets updated in Day 2. Write assertions, document expected results, debug with confidence.
-
-**Incremental** — Controlled progression through deltas. Each delta introduces new records, updates existing ones, and soft-deletes others — mirroring real source system behavior over time.
-
-**Portable** — Develop locally on DuckDB (zero cost), deploy source databases to Databricks or Azure SQL. Same schemas, same increments, different platforms.
-
----
-
-## Operations
-
-| Operation | Purpose | Example |
-| --- | --- | --- |
-| `origin_load_baseline` | Initialize source systems with Day 0 data | `dbt run-operation origin_load_baseline --profile ingestion_simulator` |
-| `origin_apply_delta` | Apply incremental changes (day 1/2/3) | `dbt run-operation origin_apply_delta --args '{day: 1}' --profile ingestion_simulator` |
-| `origin_reset` | Reset sources to baseline state | `dbt run-operation origin_reset --profile ingestion_simulator` |
-| `origin_status` | Inspect current source state | `dbt run-operation origin_status --profile ingestion_simulator` |
-
-📚 **[Detailed Operations Guide →](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Operations-Guide)**
-
----
-
-## Use Cases
-
-**Validate ingestion and transformation** — Test dbt projects, Lakeflow Connect, Fivetran, or custom CDC against sources that increment predictably. Know exactly what changed between Day 1 and Day 2.
-
-**Verify SCD Type 2 logic** — Deterministic updates and soft deletes let you validate historization patterns. Confirm your slowly changing dimension logic handles updates, deletes, and restatements correctly.
-
-**Test CDC/change tracking** — Azure SQL sources with change tracking enabled, letting you validate SQL Server-native CDC ingestion patterns before hitting production.
-
-**CI/CD for pipelines** — Spin up source databases in GitHub Actions (DuckDB), run your full ingestion + transformation pipeline, assert on known outcomes. No cloud costs for testing.
-
-**Develop locally, deploy to cloud** — Build ingestion logic against local DuckDB sources, then deploy the same pipeline against Databricks or Azure SQL sources. Same data, same increments.
-
-**Workshops and demos** — Everyone connects to identical source systems. Reset between sessions in seconds. Demonstrate incremental loads with predictable before/after states.
-
----
-
-## Batteries Included
-
-The `extras/` folder provides production-ready templates:
-
-**dbt integration**
-- `sources.yml` — Complete source definitions with column descriptions and freshness checks
-- `profiles.yml.example` — Connection templates for DuckDB, MotherDuck, Databricks, Azure SQL
-
-**Data quality — Soda Core**
-- `contracts/` — Generic validation patterns (schema, integrity, business rules)
-- `scans/` — Deterministic integration tests with exact row counts per state (baseline, day 1, day 2, day 3)
-
-**Data quality — ODCS (Bitol)**
-- Eight Open Data Contract Standard definitions (one per table)
-- Compatible with `datacontract-cli` for validation and code generation
-
-**Developer experience**
-- `tasks.json` — VS Code Command Palette actions for all operations
-- `github-actions.yml` — CI/CD workflow with baseline, incremental, and matrix testing jobs
-
-📁 **[Extras documentation →](https://github.com/feriksen-personal/dbt-source-simulator/tree/main/extras)** • **[Wiki →](https://github.com/feriksen-personal/dbt-source-simulator/wiki)**
+Same data every time. Customer #6 always appears in Day 1. Order #12 always gets updated in Day 2. Deterministic = testable.
 
 ---
 
 ## Platforms
 
-| Platform | Source Database Use Case | Status |
-| --- | --- | --- |
-| **DuckDB** | Local sources for development, CI/CD | ✅ Supported |
-| **MotherDuck** | Shared sources for team collaboration | ✅ Supported |
-| **Databricks** | Unity Catalog sources, Delta Sharing ingestion patterns | ✅ Supported |
-| **Azure SQL** | CDC-enabled sources, change tracking ingestion patterns | ✅ Supported |
+| Platform | Notes |
+|----------|-------|
+| **DuckDB** | Local dev, CI/CD. Zero cost. |
+| **MotherDuck** | Shared sources for teams |
+| **Databricks** | Unity Catalog, Delta Sharing patterns |
+| **Azure SQL** | CDC/change tracking enabled |
+
+Start local, deploy to cloud if you need to. Same data, same deltas.
 
 ---
 
-## Source Schemas
+## Extras
 
-**jaffle_shop** (ERP/e-commerce)
-- `customers` — Soft deletes, email updates
-- `products` — Price changes, static catalog
-- `orders` — Status transitions, soft deletes
-- `order_items` — Append-only line items
-- `payments` — Append-only, added in deltas
+The `extras/` folder has ready-to-use templates:
 
-**jaffle_crm** (Marketing)
-- `campaigns` — Slowly changing reference data
-- `email_activity` — Append-only event stream
-- `web_sessions` — Append-only event stream
-
-All tables include `created_at`, `updated_at` for CDC detection.
-
-📊 **[Schema documentation with delta patterns →](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Data-Schemas)**
+- **dbt**: `sources.yml`, profile examples
+- **Soda Core**: Data contracts and deterministic test scans
+- **ODCS/Bitol**: Open Data Contract Standard definitions
+- **VS Code**: Command palette tasks
+- **GitHub Actions**: CI workflow template
 
 ---
 
-## Configuration
+## When This Shines
 
-```yaml
-# dbt_project.yml (optional)
-vars:
-  dbt_source_simulator:
-    shop_db: 'jaffle_shop'  # default
-    crm_db: 'jaffle_crm'    # default
-```
+**"I have a demo Thursday"** — Load baseline, apply a delta, show the pipeline handling changes. Reset and repeat.
 
-Profile examples for each platform: **[Setup Guide →](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Getting-Started)**
+**"Does my SCD2 logic actually work?"** — You know exactly what changed between Day 1 and Day 2. Write assertions with confidence.
+
+**"I want to compare Lakeflow vs. custom Spark ingestion"** — Same source data, different approaches. Apples to apples.
+
+**"New person joining the team"** — Point them at the simulator. Let them break things, learn the stack, reset in seconds.
+
+**"CDC patterns are confusing"** — Explore change tracking on Azure SQL without touching production. See what shows up, understand the mechanics.
 
 ---
 
-## Project Structure
+## What This Isn't
 
-```
-dbt-source-simulator/
-├── macros/                     # Four operations
-├── data/
-│   ├── duckdb/                 # DuckDB/MotherDuck source definitions
-│   ├── databricks/             # Unity Catalog source definitions
-│   └── azure/                  # Azure SQL sources (in development)
-├── extras/
-│   ├── dbt/                    # sources.yml, profiles.yml.example
-│   ├── data_quality/
-│   │   ├── soda/               # Contracts + deterministic scans
-│   │   └── bitol/              # ODCS contracts (datacontract-cli compatible)
-│   ├── vscode/                 # Command palette tasks
-│   └── cicd/                   # GitHub Actions workflow
-└── scripts/                    # Development utilities
-```
+- Not a load testing tool (small dataset by design)
+- Not a replacement for production source system testing  
+- Not trying to simulate every edge case
+
+It's a utility. Saves you setup time so you can focus on the thing you actually want to build or learn.
+
+---
+
+## Links
+
+- [Wiki](https://github.com/feriksen-personal/dbt-source-simulator/wiki) — Detailed docs
+- [Operations Guide](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Operations-Guide) — All four commands explained
+- [Schema Reference](https://github.com/feriksen-personal/dbt-source-simulator/wiki/Data-Schemas) — What changes in each delta
 
 ---
 
@@ -194,9 +140,4 @@ Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
-
-
----
-
-**Questions?** [Open an issue](https://github.com/feriksen-personal/dbt-source-simulator/issues) | **Detailed docs:** [Project wiki](https://github.com/feriksen-personal/dbt-source-simulator/wiki)
+MIT
